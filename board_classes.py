@@ -22,58 +22,58 @@ class Board():
     def add(self, component):
         self.items.append(component)
     
-    def rotate(self, theta, vertex_list=None):
+    def rotate(self, theta, point_list=None):
         '''
-        Rotates an object defined by the N_polygons x N_vertices x 2 array vertex_list about the origin by an angle theta.
+        Rotates an object defined by the N_polygons x N_vertices x 2 array point_list about the origin by an angle theta.
 
         theta: angle in degrees
-        vertex_list: corners defining polygon
+        point_list: corners defining polygon
         '''
         rotation_matrix = np.array([[np.cos(np.radians(theta)), -np.sin(np.radians(theta))],
                                     [np.sin(np.radians(theta)), np.cos(np.radians(theta))]])
         
-        if vertex_list is not None:
-            for i in range(len(vertex_list)):
-                vertex_list[i] = np.matmul(rotation_matrix, vertex_list[i][:,:,None])[:,:,0]
+        if point_list is not None:
+            for i in range(len(point_list)):
+                point_list[i] = np.matmul(rotation_matrix, point_list[i][:,:,None])[:,:,0]
         else:
-            raise Exception('Must supply vertex_list.')
+            raise Exception('Must supply point_list.')
 
-    def reflect_x(self, vertex_list=None):
+    def reflect_x(self, point_list=None):
         '''
-        Reflects an object defined by the N_polygons x N_vertices x 2 array vertex_list over the x axis.
+        Reflects an object defined by the N_polygons x N_vertices x 2 array point_list over the x axis.
         '''
         reflection_matrix = np.array([[1, 0], [0, -1]])
 
-        if vertex_list is not None:
-            for i in range(len(vertex_list)):
-                vertex_list[i] = np.matmul(reflection_matrix, vertex_list[i][:,:,None])[:,:,0]
-            return vertex_list
+        if point_list is not None:
+            for i in range(len(point_list)):
+                point_list[i] = np.matmul(reflection_matrix, point_list[i][:,:,None])[:,:,0]
+            return point_list
         else:
-            raise Exception('Must supply vertex_list.')
+            raise Exception('Must supply point_list.')
 
-    def reflect_y(self, vertex_list=None):
+    def reflect_y(self, point_list=None):
         '''
-        Reflects an object defined by the N_polygons x N_vertices x 2 array vertex_list over the y axis.
+        Reflects an object defined by the N_polygons x N_vertices x 2 array point_list over the y axis.
         '''
         reflection_matrix = np.array([[-1, 0], [0, 1]])
 
-        if vertex_list is not None:
-            for i in range(len(vertex_list)):
-                vertex_list[i] = np.matmul(reflection_matrix, vertex_list[i][:,:,None])[:,:,0]
-            return vertex_list
+        if point_list is not None:
+            for i in range(len(point_list)):
+                point_list[i] = np.matmul(reflection_matrix, point_list[i][:,:,None])[:,:,0]
+            return point_list
         else:
-            raise Exception('Must supply vertex_list.')
+            raise Exception('Must supply point_list.')
 
-    def move(self, x=0, y=0, vertex_list=None):
+    def move(self, x=0, y=0, point_list=None):
         '''
-        Moves an object defined by the N_polygons x N_vertices x 2 array vertex_list by an amount (x, y)
+        Moves an object defined by the N_polygons x N_vertices x 2 array point_list by an amount (x, y)
         '''
-        if vertex_list is not None:
-            for i in range(len(vertex_list)):
-                vertex_list[i] = vertex_list[i] + np.array([x, y])[None,:]
-            return vertex_list
+        if point_list is not None:
+            for i in range(len(point_list)):
+                point_list[i] = point_list[i] + np.array([x, y])[None,:]
+            return point_list
         else:
-            raise Exception('Must supply vertex_list.')
+            raise Exception('Must supply point_list.')
 
     def vertex_to_endpoints(self, vertex_list):
         '''
@@ -140,87 +140,114 @@ class Board():
             fig, ax = plt.subplots(1, 1)
         ax.fill(self.corners[:,0], self.corners[:,1], facecolor='none', edgecolor='black')
         for i, item in enumerate(self.items):
-            item.plot(ax=ax, color=next(iter(pool)))
+            item.plot(ax=ax, color=next(iter(pool)), plot_type='all')
     
     def export_items(self, filepath):
         for item in self.items:
             item.export_items(filepath)
 
+    def __str__(self):
+        param_table = '{:<25} {:<25}\n'.format('PARAMETER', 'VALUE')     # print column names
+    
+        # print each data item.
+        for key, value in self.params.items():
+            param_table += '{:<25} {:<25}\n'.format(key, value)
+        return param_table
+
 class Component():      ## EACH COMPONENT SHOULD HAVE ROTATE, REFLECT, MOVE, AND ADD (TO ITEM LIST) OPERATIONS
 
     def __init__(self):
-        self.vertex_list = None
+        self.point_list = None
         self.items = []
     
-    def make_vertex_list(self):
+    def make_point_list(self):
         return
 
     def rotate(self, theta):
         '''
-        Rotates an object defined by the N_polygons x N_vertices x 2 array vertex_list about the origin by an angle theta.
+        Rotates an object defined by the N_polygons x N_vertices x 2 array point_list about the origin by an angle theta.
 
         theta: angle in degrees
-        vertex_list: corners defining polygon
+        point_list: corners defining polygon
         '''
         rotation_matrix = np.array([[np.cos(np.radians(theta)), -np.sin(np.radians(theta))],
                                     [np.sin(np.radians(theta)), np.cos(np.radians(theta))]])
         
-        for i in range(len(self.vertex_list)):
-            self.vertex_list[i] = np.matmul(rotation_matrix, self.vertex_list[i][:,:,None])[:,:,0]
+        for i in range(len(self.point_list)):
+            self.point_list[i] = np.matmul(rotation_matrix, self.point_list[i][:,:,None])[:,:,0]
         return self
 
     def reflect_x(self):
         '''
-        Reflects an object defined by the N_polygons x N_vertices x 2 array vertex_list over the x axis.
+        Reflects an object defined by the N_polygons x N_vertices x 2 array point_list over the x axis.
         '''
         reflection_matrix = np.array([[1, 0], [0, -1]])
 
-        for i in range(len(self.vertex_list)):
-            self.vertex_list[i] = np.matmul(reflection_matrix, self.vertex_list[i][:,:,None])[:,:,0]
+        for i in range(len(self.point_list)):
+            self.point_list[i] = np.matmul(reflection_matrix, self.point_list[i][:,:,None])[:,:,0]
         return self
 
     def reflect_y(self):
         '''
-        Reflects an object defined by the N_polygons x N_vertices x 2 array vertex_list over the y axis.
+        Reflects an object defined by the N_polygons x N_vertices x 2 array point_list over the y axis.
         '''
         reflection_matrix = np.array([[-1, 0], [0, 1]])
 
-        for i in range(len(self.vertex_list)):
-            self.vertex_list[i] = np.matmul(reflection_matrix, self.vertex_list[i][:,:,None])[:,:,0]
+        for i in range(len(self.point_list)):
+            self.point_list[i] = np.matmul(reflection_matrix, self.point_list[i][:,:,None])[:,:,0]
         return self
 
     def move(self, x=0, y=0):
         '''
-        Moves an object defined by the N_polygons x N_vertices x 2 array vertex_list by an amount (x, y)
+        Moves an object defined by the N_polygons x N_vertices x 2 array point_list by an amount (x, y)
         '''
-        for i in range(len(self.vertex_list)):
-            self.vertex_list[i] = self.vertex_list[i] + np.array([x, y])[None,:]
+        for i in range(len(self.point_list)):
+            self.point_list[i] = self.point_list[i] + np.array([x, y])[None,:]
         return self
     
     def add(self):
-        self.items.append(self.vertex_list)
+        self.items.append(self.point_list)
         return self
 
     def reset(self):
-        self.make_vertex_list()
+        self.make_point_list()
         return self
 
-    def plot(self, ax=None, color='red'):
+    def plot(self, ax=None, color='red', plot_type='template'):
+        '''
+        Plots polygon or scatter plot, depending on type of object.
+        plot_type: 'template' or 'all' -- plots the point list or set of all point lists in items, respectively.
+        '''
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=(5,5))
-        for i in range(len(self.vertex_list)):
-            if self.params['type']=='scatter':
-                ax.scatter(self.vertex_list[i][:,0], self.vertex_list[i][:,1], color=color)
-            else:
-                ax.fill(self.vertex_list[i][:,0], self.vertex_list[i][:,1], facecolor='none', edgecolor=color)
-        if ax is None:
-            plt.show()
+        if plot_type=='template':
+            for i in range(len(self.point_list)):
+                    if self.params['type']=='scatter':
+                        ax.scatter(self.point_list[i][:,0], self.point_list[i][:,1], s=5, color=color)
+                    else:
+                        ax.fill(self.point_list[i][:,0], self.point_list[i][:,1], facecolor='none', edgecolor=color)
+        elif plot_type=='all':
+            for t in range(len(self.items)):
+                for i in range(len(self.items[t])):
+                    if self.params['type']=='scatter':
+                        ax.scatter(self.items[t][i][:,0], self.items[t][i][:,1], s=5, color=color)
+                    else:
+                        ax.fill(self.items[t][i][:,0], self.items[t][i][:,1], facecolor='none', edgecolor=color)
+        plt.axis('equal')
     
     def export_items(self, filepath):
         filename = filepath + self.params['name'] + '.csv'
         with open(filename, 'w') as file:
             write = csv.writer(file)
             write.writerows(np.stack(self.items, axis=0).tolist())
+
+    def __str__(self):
+        param_table = '{:<25} {:<25}\n'.format('PARAMETER', 'VALUE')     # print column names
+    
+        # print each data item.
+        for key, value in self.params.items():
+            param_table += '{:<25} {:<25}\n'.format(key, value)
+        return param_table
 
 class Transition(Component):
 
@@ -229,13 +256,13 @@ class Transition(Component):
         self.params.pop('self')
         self.params['type'] = 'polygon'
         self.items = []
-        self.make_vertex_list()
+        self.make_point_list()
 
-    def make_vertex_list(self):
+    def make_point_list(self):
         '''
         Constructs ordered vertex list describing coax transition polygon, starting at top left at origin and moving clockwise
         See dimension labels in companion figure
-        Creates (2 x N x 2) vertex array vertex_list
+        Creates (2 x N x 2) vertex array point_list
         First dimension specifies upper and lower polygons
         Uses self.params dictionary
         Required dictionary keys: L_track, L_taper, L_tip, w_gap, w_track, w1, w2 
@@ -243,7 +270,7 @@ class Transition(Component):
         x_start = 0
         y_start = 0
 
-        vertex_list_upper = np.array([x_start, y_start])[None,:]
+        point_list_upper = np.array([x_start, y_start])[None,:]
 
         deltas = np.array([[self.params['L_track'], 0],
                            [self.params['L_taper'], self.params['w1']/2 - self.params['w_track']/2 - self.params['w_gap']],
@@ -255,15 +282,15 @@ class Transition(Component):
                             ])
 
         for i in range(deltas.shape[0]):
-            vertex_list_upper = np.append(vertex_list_upper, 
-                                               vertex_list_upper[i,:][None,:] + deltas[i,:][None,:],
+            point_list_upper = np.append(point_list_upper, 
+                                               point_list_upper[i,:][None,:] + deltas[i,:][None,:],
                                                axis = 0)
         
-        vertex_list_lower = np.copy(vertex_list_upper)
-        vertex_list_lower = Board.reflect_x(self, vertex_list=vertex_list_lower[None,:,:])[0,:,:]
-        vertex_list_lower = Board.move(self, x=0, y=-(2*self.params['w_gap'] + self.params['w_track']), vertex_list=vertex_list_lower[None,:,:])[0,:,:]
+        point_list_lower = np.copy(point_list_upper)
+        point_list_lower = Board.reflect_x(self, point_list=point_list_lower[None,:,:])[0,:,:]
+        point_list_lower = Board.move(self, x=0, y=-(2*self.params['w_gap'] + self.params['w_track']), point_list=point_list_lower[None,:,:])[0,:,:]
 
-        self.vertex_list = [vertex_list_upper, vertex_list_lower]
+        self.point_list = [point_list_upper, point_list_lower]
 
 
 class Termination(Component):
@@ -273,20 +300,20 @@ class Termination(Component):
         self.params.pop('self')
         self.params['type'] = 'polygon'
         self.items = []
-        self.make_vertex_list()
+        self.make_point_list()
 
-    def make_vertex_list(self):
+    def make_point_list(self):
         '''
         Constructs ordered vertex list describing termination polygon, starting at top left at origin and moving clockwise
         See dimension labels in companion figure
-        Creates vertex array vertex_list
+        Creates vertex array point_list
         Uses self.params dictionary
         Required dictionary keys: w_gap_top, L_track, L_taper, w_gap, w_track, w1, w2
         '''
         x_start = 0
         y_start = 0
 
-        vertex_list = np.array([x_start, y_start])[None,:]
+        point_list = np.array([x_start, y_start])[None,:]
 
         deltas = np.array([[self.params['w_gap_top'] + self.params['L_track'], 0],
                            [self.params['L_taper'], self.params['w1']/2 - self.params['w_gap'] - self.params['w_track']/2],
@@ -302,10 +329,10 @@ class Termination(Component):
                            [0, self.params['w_track'] + 2*self.params['w_gap']]
                             ])
         for i in range(deltas.shape[0]):
-            vertex_list = np.append(vertex_list, 
-                                        vertex_list[i,:][None,:] + deltas[i,:][None,:],
+            point_list = np.append(point_list, 
+                                        point_list[i,:][None,:] + deltas[i,:][None,:],
                                         axis = 0)
-        self.vertex_list = [vertex_list]
+        self.point_list = [point_list]
 
 class Choke(Component):
 
@@ -314,9 +341,9 @@ class Choke(Component):
         self.params.pop('self')
         self.params['type'] = 'polygon'
         self.items = []
-        self.make_vertex_list()
+        self.make_point_list()
 
-    def make_vertex_list(self):
+    def make_point_list(self):
         '''
         Makes corner array defining RF decoupling filters
         Starts at top left corner, places center of pad at origin
@@ -328,28 +355,28 @@ class Choke(Component):
         theta_list1 = np.linspace(theta0, theta0 - np.radians(self.params['theta_filter']), self.params['n_points_curve1'])
         theta_list2 = np.linspace(theta0 - np.radians(self.params['theta_filter']), -np.pi - (np.pi - theta0), self.params['n_points_curve2'])
 
-        vertex_list_inner = np.array([]).reshape(0, 2)
+        point_list_inner = np.array([]).reshape(0, 2)
         for i in range(self.params['n_points_curve1']):
-            vertex_list_inner = np.append(vertex_list_inner,
+            point_list_inner = np.append(point_list_inner,
                                                         np.array([self.params['r_filter'] * np.cos(theta_list1[i]),
                                                             self.params['r_filter'] * np.sin(theta_list1[i])])[None,:], axis=0)
 
         for i in range(self.params['n_points_curve2']):
-            vertex_list_inner = np.append(vertex_list_inner,
+            point_list_inner = np.append(point_list_inner,
                                                 np.array([self.params['choke_pad_diameter']/2 * np.cos(theta_list2[i]),
                                                             self.params['choke_pad_diameter']/2 * np.sin(theta_list2[i])])[None,:], axis=0)
 
-        vertex_list_inner = np.append(vertex_list_inner,
+        point_list_inner = np.append(point_list_inner,
                                                     np.array([self.params['r_filter'] * np.cos(theta_list1[0]),
                                                             self.params['r_filter'] * np.sin(theta_list1[0])])[None,:], axis=0)
         
         filter_scale = 1.2
-        vertex_list_outer = filter_scale * vertex_list_inner
+        point_list_outer = filter_scale * point_list_inner
         filter_r_gap = filter_scale * self.params['r_filter'] - self.params['r_filter']
-        vertex_list_outer = vertex_list_outer - np.array([0, filter_r_gap/2])[None,:]
+        point_list_outer = point_list_outer - np.array([0, filter_r_gap/2])[None,:]
 
         self.params['filter_r_gap'] = filter_r_gap
-        self.vertex_list = [vertex_list_inner, vertex_list_outer]
+        self.point_list = [point_list_inner, point_list_outer]
 
 class cELC(Component):
 
@@ -358,9 +385,9 @@ class cELC(Component):
         self.params.pop('self')
         self.params['type'] = 'polygon'
         self.items = []
-        self.make_vertex_list()
+        self.make_point_list()
 
-    def make_vertex_list(self):
+    def make_point_list(self):
         '''
         Constructs two ordered vertex lists describing cELC polygons, starting at top left and moving clockwise, origin at center.
         See dimension labels in companion figure
@@ -373,43 +400,57 @@ class cELC(Component):
         self.params['wy_tot'] = self.params['wy_cELC'] + 2*self.params['wy_gap']
         stub_length = (self.params['wy_gap'] - self.params['cELC_varactor_gap'])/2
 
-        vertex_list_inner = np.array([[-self.params['wx_cELC']/2, -self.params['wy_cELC']/2],
-                            [-self.params['w_cELC_varactor']/2, -self.params['wy_cELC']/2],
-                            [-self.params['w_cELC_varactor']/2, -self.params['wy_cELC']/2 - stub_length],
-                            [self.params['w_cELC_varactor']/2, -self.params['wy_cELC']/2 - stub_length],
-                            [self.params['w_cELC_varactor']/2, -self.params['wy_cELC']/2],
-                            [self.params['wx_cELC']/2, -self.params['wy_cELC']/2],
-                            [self.params['wx_cELC']/2, -self.params['w_gap']/2],
-                            [self.params['wx_cELC']/2-self.params['w_arm2'], -self.params['w_gap']/2],
-                            [self.params['wx_cELC']/2-self.params['w_arm2'], -self.params['wy_cELC']/2+self.params['w_arm1']],
-                            [self.params['w_center']/2, -self.params['wy_cELC']/2+self.params['w_arm1']],
-                            [self.params['w_center']/2, self.params['wy_cELC']/2-self.params['w_arm1']],
-                            [self.params['wx_cELC']/2-self.params['w_arm2'], self.params['wy_cELC']/2-self.params['w_arm1']],
-                            [self.params['wx_cELC']/2-self.params['w_arm2'], self.params['w_gap']/2],
-                            [self.params['wx_cELC']/2, self.params['w_gap']/2],
-                            [self.params['wx_cELC']/2, self.params['wy_cELC']/2],
-                            [-self.params['wx_cELC']/2, self.params['wy_cELC']/2],
-                            [-self.params['wx_cELC']/2, self.params['w_gap']/2],
-                            [-self.params['wx_cELC']/2+self.params['w_arm2'], self.params['w_gap']/2],
-                            [-self.params['wx_cELC']/2+self.params['w_arm2'], self.params['wy_cELC']/2-self.params['w_arm1']],
-                            [-self.params['w_center']/2, self.params['wy_cELC']/2-self.params['w_arm1']],
-                            [-self.params['w_center']/2, -self.params['wy_cELC']/2+self.params['w_arm1']],
-                            [-self.params['wx_cELC']/2+self.params['w_arm2'], -self.params['wy_cELC']/2+self.params['w_arm1']],
-                            [-self.params['wx_cELC']/2+self.params['w_arm2'], -self.params['w_gap']/2],
-                            [-self.params['wx_cELC']/2, -self.params['w_gap']/2],
-                            [-self.params['wx_cELC']/2, -self.params['wy_cELC']/2]])
+        x_start = -self.params['wx_cELC']/2
+        y_start = self.params['wy_cELC']/2
+        point_list_inner = np.array([x_start, y_start])[None,:]
+        deltas = np.array([[self.params['wx_cELC'], 0],
+                           [0, -(self.params['wy_cELC'] - self.params['w_gap'])/2],
+                           [-self.params['w_arm2'], 0],
+                           [0, (self.params['wy_cELC'] - self.params['w_gap'] - 2*self.params['w_arm1'])/2],
+                           [-(self.params['wx_cELC'] - 2*self.params['w_arm2'] - self.params['w_center'])/2, 0],
+                           [0, -(self.params['wy_cELC'] - 2*self.params['w_arm1'])],
+                           [(self.params['wx_cELC'] - 2*self.params['w_arm2'] - self.params['w_center'])/2, 0],
+                           [0, (self.params['wy_cELC'] - self.params['w_gap'] - 2*self.params['w_arm1'])/2],
+                           [self.params['w_arm2'], 0],
+                           [0, -(self.params['wy_cELC'] - self.params['w_gap'])/2],
+                           [-(self.params['wx_cELC'] - self.params['w_cELC_varactor'])/2, 0],
+                           [0, -stub_length],
+                           [-self.params['w_cELC_varactor'], 0],
+                           [0, stub_length],
+                           [-(self.params['wx_cELC'] - self.params['w_cELC_varactor'])/2, 0],
+                           [0, (self.params['wy_cELC'] - self.params['w_gap'])/2],
+                           [self.params['w_arm2'], 0],
+                           [0, -(self.params['wy_cELC'] - self.params['w_gap'] - 2*self.params['w_arm1'])/2],
+                           [(self.params['wx_cELC'] - 2*self.params['w_arm2'] - self.params['w_center'])/2, 0],
+                           [0, self.params['wy_cELC'] - 2*self.params['w_arm1']],
+                           [-(self.params['wx_cELC'] - 2*self.params['w_arm2'] - self.params['w_center'])/2, 0],
+                           [0, -(self.params['wy_cELC'] - self.params['w_gap'] - 2*self.params['w_arm1'])/2],
+                           [-self.params['w_arm2'], 0],
+                           [0, (self.params['wy_cELC'] - self.params['w_gap'])/2]
+                            ])
+        for i in range(deltas.shape[0]):
+            point_list_inner = np.append(point_list_inner, 
+                                        point_list_inner[i,:][None,:] + deltas[i,:][None,:],
+                                        axis = 0)
 
-        vertex_list_outer = np.array([[-self.params['wx_tot']/2, -self.params['wy_tot']/2],
-                            [-self.params['w_cELC_varactor']/2, -self.params['wy_tot']/2],
-                            [-self.params['w_cELC_varactor']/2, -self.params['wy_tot']/2 + stub_length],
-                            [self.params['w_cELC_varactor']/2, -self.params['wy_tot']/2 + stub_length],
-                            [self.params['w_cELC_varactor']/2, -self.params['wy_tot']/2],
-                            [self.params['wx_tot']/2, -self.params['wy_tot']/2],
-                            [self.params['wx_tot']/2, self.params['wy_tot']/2],
-                            [-self.params['wx_tot']/2, self.params['wy_tot']/2],
-                            [-self.params['wx_tot']/2, -self.params['wy_tot']/2]])
+        x_start = -self.params['wx_tot']/2
+        y_start = self.params['wy_tot']/2
+        point_list_outer = np.array([x_start, y_start])[None,:]
+        deltas = np.array([[self.params['wx_tot'], 0],
+                           [0, -self.params['wy_tot']],
+                           [-(self.params['wx_tot'] - self.params['w_cELC_varactor'])/2, 0],
+                           [0, stub_length],
+                           [-self.params['w_cELC_varactor'], 0],
+                           [0, -stub_length],
+                           [-(self.params['wx_tot'] - self.params['w_cELC_varactor'])/2, 0],
+                           [0, self.params['wy_tot']]
+                            ])
+        for i in range(deltas.shape[0]):
+            point_list_outer = np.append(point_list_outer, 
+                                        point_list_outer[i,:][None,:] + deltas[i,:][None,:],
+                                        axis = 0)
 
-        self.vertex_list = [vertex_list_inner, vertex_list_outer]
+        self.point_list = [point_list_inner, point_list_outer]
 
 class SIW(Component):
 
@@ -418,9 +459,9 @@ class SIW(Component):
         self.params.pop('self')
         self.params['type'] = 'scatter'
         self.items = []
-        self.make_vertex_list()
+        self.make_point_list()
 
-    def make_vertex_list(self):
+    def make_point_list(self):
         '''
         Constructs two ordered vertex lists describing SIW polygon(s), starting at top left and moving clockwise, origin at center.
         See dimension labels in companion figure
@@ -432,7 +473,7 @@ class SIW(Component):
         x_start = 0
         y_start = 0
 
-        vertex_list_1 = np.array([x_start, y_start])[None,:]
+        point_list_1 = np.array([x_start, y_start])[None,:]
 
         deltas = np.array([[self.params['L_track'], 0],
                            [self.params['L_taper'], (self.params['w_wg'] - self.params['w_wall'])/2],
@@ -441,20 +482,20 @@ class SIW(Component):
                            [self.params['L_track'], 0]
                             ])
         for i in range(deltas.shape[0]):
-            vertex_list_1 = np.append(vertex_list_1, 
-                                        vertex_list_1[i,:][None,:] + deltas[i,:][None,:],
+            point_list_1 = np.append(point_list_1, 
+                                        point_list_1[i,:][None,:] + deltas[i,:][None,:],
                                         axis=0)
-        vertex_list_2 = np.copy(vertex_list_1)
-        vertex_list_2 = Board.move(self, x=0, y=-self.params['w_wall'], vertex_list=Board.reflect_x(self, vertex_list=vertex_list_2[None,:,:]))[0,:,:]
-        vertex_list_2 = np.flip(vertex_list_2, axis=0)
+        point_list_2 = np.copy(point_list_1)
+        point_list_2 = Board.move(self, x=0, y=-self.params['w_wall'], point_list=Board.reflect_x(self, point_list=point_list_2[None,:,:]))[0,:,:]
+        point_list_2 = np.flip(point_list_2, axis=0)
 
         if self.params['mode']=='open':
-            self.vertex_list = [vertex_list_1, vertex_list_2]
+            self.point_list = [point_list_1, point_list_2]
         elif self.params['mode']=='half-open-left' or self.params['mode']=='half-open-right':
-            self.vertex_list = [np.append(vertex_list_1, vertex_list_2, axis=0)]
+            self.point_list = [np.append(point_list_1, point_list_2, axis=0)]
         elif self.params['mode']=='closed':
-            vertex_list = np.append(vertex_list_1, vertex_list_2, axis=0)
-            self.vertex_list = [np.append(vertex_list, np.array([x_start, y_start])[None,:], axis=0)]
+            point_list = np.append(point_list_1, point_list_2, axis=0)
+            self.point_list = [np.append(point_list, np.array([x_start, y_start])[None,:], axis=0)]
         
         self.vertex_to_endpoints()
         self.make_via_list()
@@ -462,16 +503,16 @@ class SIW(Component):
     def vertex_to_endpoints(self):
         '''
         Creates an (N-1) x (x, y) x (start, end) array of line segments from an N x 2 array of corners.
-        vertex_list: N_polygons x N_vertices x 2 ordered array of corners. Include the starting corner if creating closed loop.
+        point_list: N_polygons x N_vertices x 2 ordered array of corners. Include the starting corner if creating closed loop.
         
         '''
         self.endpoint_list = []
-        for i in range(len(self.vertex_list)):
-            N_corners = self.vertex_list[i].shape[0]
+        for i in range(len(self.point_list)):
+            N_corners = self.point_list[i].shape[0]
             endpoint_array = np.empty((N_corners-1, 2, 2), dtype=np.float32)
             
             for j in range(N_corners-1):
-                endpoint_array[j,:,:] = np.transpose(np.array([self.vertex_list[i][j,:], self.vertex_list[i][j+1,:]]))
+                endpoint_array[j,:,:] = np.transpose(np.array([self.point_list[i][j,:], self.point_list[i][j+1,:]]))
             self.endpoint_list.append(endpoint_array)
                         
     def make_via_list(self):
@@ -481,7 +522,7 @@ class SIW(Component):
         pitch: via pitch (float)
         even: if True, rounds via pitch so that vias are evenly spaced between endpoints
         '''
-        self.vertex_list = []
+        self.point_list = []
         for i in range(len(self.endpoint_list)):
             point_array = np.array([]).reshape(0, 2)
             for j in range(self.endpoint_list[i].shape[0]):
@@ -504,5 +545,5 @@ class SIW(Component):
                     points_temp = np.append(points_temp, new_point[None,:], axis=0)
 
                 point_array = np.append(point_array, points_temp, axis=0)
-            self.vertex_list.append(point_array)
+            self.point_list.append(point_array)
 

@@ -5,7 +5,7 @@ from itertools import cycle
 
 cm = 0.01
 
-### EACH ITEM IS AN N_POLYGONS X N_VERTICES X 2 ARRAY
+### EACH ITEM IS A LENGTH N_POLYGONS LIST OF N_VERTICES X 2 ARRAYS
 
 class Board():
 
@@ -33,8 +33,8 @@ class Board():
                                     [np.sin(np.radians(theta)), np.cos(np.radians(theta))]])
         
         if vertex_list is not None:
-            for i in range(vertex_list.shape[0]):
-                vertex_list[i,:,:] = np.matmul(rotation_matrix, vertex_list[i,:,:,None])[:,:,0]
+            for i in range(len(vertex_list)):
+                vertex_list[i] = np.matmul(rotation_matrix, vertex_list[i][:,:,None])[:,:,0]
         else:
             raise Exception('Must supply vertex_list.')
 
@@ -45,8 +45,8 @@ class Board():
         reflection_matrix = np.array([[1, 0], [0, -1]])
 
         if vertex_list is not None:
-            for i in range(vertex_list.shape[0]):
-                vertex_list[i,:,:] = np.matmul(reflection_matrix, vertex_list[i,:,:,None])[:,:,0]
+            for i in range(len(vertex_list)):
+                vertex_list[i] = np.matmul(reflection_matrix, vertex_list[i][:,:,None])[:,:,0]
             return vertex_list
         else:
             raise Exception('Must supply vertex_list.')
@@ -58,8 +58,8 @@ class Board():
         reflection_matrix = np.array([[-1, 0], [0, 1]])
 
         if vertex_list is not None:
-            for i in range(vertex_list.shape[0]):
-                vertex_list[i,:,:] = np.matmul(reflection_matrix, vertex_list[i,:,:,None])[:,:,0]
+            for i in range(len(vertex_list)):
+                vertex_list[i] = np.matmul(reflection_matrix, vertex_list[i][:,:,None])[:,:,0]
             return vertex_list
         else:
             raise Exception('Must supply vertex_list.')
@@ -69,8 +69,8 @@ class Board():
         Moves an object defined by the N_polygons x N_vertices x 2 array vertex_list by an amount (x, y)
         '''
         if vertex_list is not None:
-            for i in range(vertex_list.shape[0]):
-                vertex_list[i,:,:] = vertex_list[i,:,:] + np.array([x, y])[None,:]
+            for i in range(len(vertex_list)):
+                vertex_list[i] = vertex_list[i] + np.array([x, y])[None,:]
             return vertex_list
         else:
             raise Exception('Must supply vertex_list.')
@@ -82,46 +82,55 @@ class Board():
         
         '''
         if vertex_list is not None:
-            for i in range(vertex_list.shape[0]):
-                N_corners = vertex_list[i,:,:].shape[0]
+            endpoint_list = []
+            for i in range(len(vertex_list)):
+                N_corners = vertex_list[i].shape[0]
                 endpoint_array = np.empty((N_corners-1, 2, 2), dtype=np.float32)
                 
                 for j in range(N_corners-1):
-                    endpoint_array[i,j,:,:] = np.transpose(np.array([vertex_list[i,j,:], vertex_list[i,j+1,:]]))
+                    endpoint_array[j,:,:] = np.transpose(np.array([vertex_list[i][j,:], vertex_list[i][j+1,:]]))
+                endpoint_list.append(endpoint_array)
                         
-            return endpoint_array
+            return endpoint_list
+        else:
+            raise Exception('Must supply vertex_list.')
 
-    def make_via_list(self, endpoints_array, pitch, even=True):
+    def make_via_list(self, endpoint_list, pitch, even=True):
         '''
         Generates N x 2 array of via positions from N_lines x (x, y) x (start, end) array of line segments.
 
         pitch: via pitch (float)
         even: if True, rounds via pitch so that vias are evenly spaced between endpoints
         '''
-        
-        points_array = np.array([]).reshape(0, 2)
-        for i in range(endpoints_array.shape[0]):
-            vector = endpoints_array[i,:,1] - endpoints_array[i,:,0]
-            vector_length = np.linalg.norm(vector)
-            unit_vector = vector/vector_length
-            
-            N = np.ceil(vector_length/pitch).astype(np.int32)
-            
-            if even is True:
-                pitch_even = vector_length/(N.astype(np.float32)) #sets via pitch so that vias are evenly spaced over length of line
-            else:
-                pitch_even = pitch
+        if endpoint_list is not None:
+            point_list = []
+            for i in range(len(endpoint_list)):
+                point_array = np.array([]).reshape(0, 2)
+                for j in range(endpoint_list[i].shape[0]):
+                    vector = endpoint_list[i][j,:,1] - endpoint_list[i][j,:,0]
+                    vector_length = np.linalg.norm(vector)
+                    unit_vector = vector/vector_length
+                    
+                    N = np.ceil(vector_length/pitch).astype(np.int32)
+                    
+                    if even is True:
+                        pitch_even = vector_length/(N.astype(np.float32)) #sets via pitch so that vias are evenly spaced over length of line
+                    else:
+                        pitch_even = pitch
 
-            points_list = np.array([]).reshape((0, 2))
-            for n in range(N):
+                    points_temp = np.array([]).reshape((0, 2))
+                    for n in range(N):
+                    
+                        new_point = endpoint_list[i][j,:,0] + n*pitch_even*unit_vector
+
+                        points_temp = np.append(points_temp, new_point[None,:], axis=0)
+
+                    point_array = np.append(point_array, points_temp, axis=0)
+                point_list.append(point_array)
             
-                new_point = endpoints_array[i,:,0] + n*pitch_even*unit_vector
-
-                points_list = np.append(points_list, new_point[None,:], axis=0)
-
-            points_array = np.append(points_array, points_list, axis=0)
-        
-        return points_array
+            return point_list
+        else:
+            raise Exception('Must supply endpoint_list.')
 
     def plot(self, ax=None):
         cycle_colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
@@ -156,8 +165,8 @@ class Component():      ## EACH COMPONENT SHOULD HAVE ROTATE, REFLECT, MOVE, AND
         rotation_matrix = np.array([[np.cos(np.radians(theta)), -np.sin(np.radians(theta))],
                                     [np.sin(np.radians(theta)), np.cos(np.radians(theta))]])
         
-        for i in range(self.vertex_list.shape[0]):
-            self.vertex_list[i,:,:] = np.matmul(rotation_matrix, self.vertex_list[i,:,:,None])[:,:,0]
+        for i in range(len(self.vertex_list)):
+            self.vertex_list[i] = np.matmul(rotation_matrix, self.vertex_list[i][:,:,None])[:,:,0]
         return self
 
     def reflect_x(self):
@@ -166,8 +175,8 @@ class Component():      ## EACH COMPONENT SHOULD HAVE ROTATE, REFLECT, MOVE, AND
         '''
         reflection_matrix = np.array([[1, 0], [0, -1]])
 
-        for i in range(self.vertex_list.shape[0]):
-            self.vertex_list[i,:,:] = np.matmul(reflection_matrix, self.vertex_list[i,:,:,None])[:,:,0]
+        for i in range(len(self.vertex_list)):
+            self.vertex_list[i] = np.matmul(reflection_matrix, self.vertex_list[i][:,:,None])[:,:,0]
         return self
 
     def reflect_y(self):
@@ -176,16 +185,16 @@ class Component():      ## EACH COMPONENT SHOULD HAVE ROTATE, REFLECT, MOVE, AND
         '''
         reflection_matrix = np.array([[-1, 0], [0, 1]])
 
-        for i in range(self.vertex_list.shape[0]):
-            self.vertex_list[i,:,:] = np.matmul(reflection_matrix, self.vertex_list[i,:,:,None])[:,:,0]
+        for i in range(len(self.vertex_list)):
+            self.vertex_list[i] = np.matmul(reflection_matrix, self.vertex_list[i][:,:,None])[:,:,0]
         return self
 
     def move(self, x=0, y=0):
         '''
         Moves an object defined by the N_polygons x N_vertices x 2 array vertex_list by an amount (x, y)
         '''
-        for i in range(self.vertex_list.shape[0]):
-            self.vertex_list[i,:,:] = self.vertex_list[i,:,:] + np.array([x, y])[None,:]
+        for i in range(len(self.vertex_list)):
+            self.vertex_list[i] = self.vertex_list[i] + np.array([x, y])[None,:]
         return self
     
     def add(self):
@@ -199,11 +208,11 @@ class Component():      ## EACH COMPONENT SHOULD HAVE ROTATE, REFLECT, MOVE, AND
     def plot(self, ax=None, color='red'):
         if ax is None:
             fig, ax = plt.subplots(1, 1, figsize=(5,5))
-        for i in range(self.vertex_list.shape[0]):
+        for i in range(len(self.vertex_list)):
             if self.params['type']=='scatter':
-                ax.scatter(self.vertex_list[i,:,0], self.vertex_list[i,:,1], color=color)
+                ax.scatter(self.vertex_list[i][:,0], self.vertex_list[i][:,1], color=color)
             else:
-                ax.fill(self.vertex_list[i,:,0], self.vertex_list[i,:,1], facecolor='none', edgecolor=color)
+                ax.fill(self.vertex_list[i][:,0], self.vertex_list[i][:,1], facecolor='none', edgecolor=color)
         if ax is None:
             plt.show()
     
@@ -254,7 +263,7 @@ class Transition(Component):
         vertex_list_lower = Board.reflect_x(self, vertex_list=vertex_list_lower[None,:,:])[0,:,:]
         vertex_list_lower = Board.move(self, x=0, y=-(2*self.params['w_gap'] + self.params['w_track']), vertex_list=vertex_list_lower[None,:,:])[0,:,:]
 
-        self.vertex_list = np.stack((vertex_list_upper, vertex_list_lower), axis=0)
+        self.vertex_list = [vertex_list_upper, vertex_list_lower]
 
 
 class Termination(Component):
@@ -277,7 +286,7 @@ class Termination(Component):
         x_start = 0
         y_start = 0
 
-        self.vertex_list = np.array([x_start, y_start])[None,:]
+        vertex_list = np.array([x_start, y_start])[None,:]
 
         deltas = np.array([[self.params['w_gap_top'] + self.params['L_track'], 0],
                            [self.params['L_taper'], self.params['w1']/2 - self.params['w_gap'] - self.params['w_track']/2],
@@ -293,18 +302,10 @@ class Termination(Component):
                            [0, self.params['w_track'] + 2*self.params['w_gap']]
                             ])
         for i in range(deltas.shape[0]):
-            self.vertex_list = np.append(self.vertex_list, 
-                                        self.vertex_list[i,:][None,:] + deltas[i,:][None,:],
+            vertex_list = np.append(vertex_list, 
+                                        vertex_list[i,:][None,:] + deltas[i,:][None,:],
                                         axis = 0)
-        self.vertex_list = self.vertex_list[None,:,:]
-
-    def plot(self, ax=None, color='red'):
-        if ax is None:
-            fig, ax = plt.subplots(1, 1, figsize=(5,5))
-        for i in range(self.vertex_list.shape[0]):
-            ax.scatter(self.vertex_list[i,:,0], self.vertex_list[i,:,1], color=color)
-        if ax is None:
-            plt.show()
+        self.vertex_list = [vertex_list]
 
 class Choke(Component):
 
@@ -348,7 +349,7 @@ class Choke(Component):
         vertex_list_outer = vertex_list_outer - np.array([0, filter_r_gap/2])[None,:]
 
         self.params['filter_r_gap'] = filter_r_gap
-        self.vertex_list = np.stack((vertex_list_inner, vertex_list_outer), axis=0)
+        self.vertex_list = [vertex_list_inner, vertex_list_outer]
 
 class cELC(Component):
 
@@ -408,11 +409,11 @@ class cELC(Component):
                             [-self.params['wx_tot']/2, self.params['wy_tot']/2],
                             [-self.params['wx_tot']/2, -self.params['wy_tot']/2]])
 
-        self.vertex_list = np.stack((vertex_list_inner, vertex_list_outer), axis=0)
+        self.vertex_list = [vertex_list_inner, vertex_list_outer]
 
 class SIW(Component):
 
-    def __init__(self, L_wg, w_wg, L_taper, L_track, w_wall, mode='closed', name='SIW'):
+    def __init__(self, L_wg, w_wg, L_taper, L_track, w_wall, pitch, even=True, mode='closed', name='SIW'):
         self.params = locals()
         self.params.pop('self')
         self.params['type'] = 'scatter'
@@ -448,9 +449,60 @@ class SIW(Component):
         vertex_list_2 = np.flip(vertex_list_2, axis=0)
 
         if self.params['mode']=='open':
-            self.vertex_list = np.stack((vertex_list_1, vertex_list_2), axis=0)
+            self.vertex_list = [vertex_list_1, vertex_list_2]
         elif self.params['mode']=='half-open-left' or self.params['mode']=='half-open-right':
-            self.vertex_list = np.append(vertex_list_1, vertex_list_2, axis=0)[None,:,:]
+            self.vertex_list = [np.append(vertex_list_1, vertex_list_2, axis=0)]
         elif self.params['mode']=='closed':
-            self.vertex_list = np.append(vertex_list_1, vertex_list_2, axis=0)
-            self.vertex_list = np.append(self.vertex_list, np.array([x_start, y_start])[None,:], axis=0)[None,:,:]
+            vertex_list = np.append(vertex_list_1, vertex_list_2, axis=0)
+            self.vertex_list = [np.append(vertex_list, np.array([x_start, y_start])[None,:], axis=0)]
+        
+        self.vertex_to_endpoints()
+        self.make_via_list()
+
+    def vertex_to_endpoints(self):
+        '''
+        Creates an (N-1) x (x, y) x (start, end) array of line segments from an N x 2 array of corners.
+        vertex_list: N_polygons x N_vertices x 2 ordered array of corners. Include the starting corner if creating closed loop.
+        
+        '''
+        self.endpoint_list = []
+        for i in range(len(self.vertex_list)):
+            N_corners = self.vertex_list[i].shape[0]
+            endpoint_array = np.empty((N_corners-1, 2, 2), dtype=np.float32)
+            
+            for j in range(N_corners-1):
+                endpoint_array[j,:,:] = np.transpose(np.array([self.vertex_list[i][j,:], self.vertex_list[i][j+1,:]]))
+            self.endpoint_list.append(endpoint_array)
+                        
+    def make_via_list(self):
+        '''
+        Generates N x 2 array of via positions from N_lines x (x, y) x (start, end) array of line segments.
+
+        pitch: via pitch (float)
+        even: if True, rounds via pitch so that vias are evenly spaced between endpoints
+        '''
+        self.vertex_list = []
+        for i in range(len(self.endpoint_list)):
+            point_array = np.array([]).reshape(0, 2)
+            for j in range(self.endpoint_list[i].shape[0]):
+                vector = self.endpoint_list[i][j,:,1] - self.endpoint_list[i][j,:,0]
+                vector_length = np.linalg.norm(vector)
+                unit_vector = vector/vector_length
+                
+                N = np.ceil(vector_length/self.params['pitch']).astype(np.int32)
+                
+                if self.params['even'] is True:
+                    pitch_even = vector_length/(N.astype(np.float32)) #sets via pitch so that vias are evenly spaced over length of line
+                else:
+                    pitch_even = self.params['pitch']
+
+                points_temp = np.array([]).reshape((0, 2))
+                for n in range(N):
+                
+                    new_point = self.endpoint_list[i][j,:,0] + n*pitch_even*unit_vector
+
+                    points_temp = np.append(points_temp, new_point[None,:], axis=0)
+
+                point_array = np.append(point_array, points_temp, axis=0)
+            self.vertex_list.append(point_array)
+

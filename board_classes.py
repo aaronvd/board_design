@@ -1,6 +1,7 @@
 import csv
 import numpy as np
 from matplotlib import pyplot as plt
+from itertools import cycle
 
 cm = 0.01
 
@@ -12,14 +13,14 @@ class Board():
 
         self.params = locals()
         self.params.pop('self')
-        self.items = {}
+        self.items = []
         self.corners = np.array([[0, 0], [0, self.params['Ly_board']],
                                  [self.params['Lx_board'], self.params['Ly_board']], 
                                  [self.params['Lx_board'], 0], 
                                  [0, 0]])
 
     def add(self, component):
-        self.items[component.params['name']] = component.items
+        self.items.append(component)
     
     def rotate(self, theta, vertex_list=None):
         '''
@@ -77,16 +78,18 @@ class Board():
     def vertex_to_endpoints(self, vertex_list):
         '''
         Creates an (N-1) x (x, y) x (start, end) array of line segments from an N x 2 array of corners.
-        vertex_list: N x 2 ordered array of corners. Include the starting corner if creating closed loop.
+        vertex_list: N_polygons x N_vertices x 2 ordered array of corners. Include the starting corner if creating closed loop.
         
         '''
-        N_corners = vertex_list.shape[0]
-        endpoint_array = np.empty((N_corners-1, 2, 2), dtype=np.float32)
-        
-        for i in range(N_corners-1):
-            endpoint_array[i,:,:] = np.transpose(np.array([vertex_list[i,:], vertex_list[i+1,:]]))
+        if vertex_list is not None:
+            for i in range(vertex_list.shape[0]):
+                N_corners = vertex_list[i,:,:].shape[0]
+                endpoint_array = np.empty((N_corners-1, 2, 2), dtype=np.float32)
                 
-        return endpoint_array
+                for j in range(N_corners-1):
+                    endpoint_array[i,j,:,:] = np.transpose(np.array([vertex_list[i,j,:], vertex_list[i,j+1,:]]))
+                        
+            return endpoint_array
 
     def make_via_list(self, endpoints_array, pitch, even=True):
         '''
@@ -119,13 +122,20 @@ class Board():
             points_array = np.append(points_array, points_list, axis=0)
         
         return points_array
+
+    def plot(self, ax=None):
+        cycle_colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+        pool = cycle(cycle_colors)
+
+        if ax is None:
+            fig, ax = plt.subplots(1, 1)
+        ax.fill(self.corners[:,0], self.corners[:,1], facecolor='none', edgecolor='black')
+        for i, item in enumerate(self.items):
+            item.plot(ax=ax, color=next(iter(pool)))
     
     def export_items(self, filepath):
         for item in self.items:
-            filename = filepath + item + '.csv'
-            with open(filename, 'w') as file:
-                write = csv.writer(file)
-                write.writerows(np.stack(self.items[item], axis=0).tolist())
+            item.export_items(filepath)
 
 class Component():      ## EACH COMPONENT SHOULD HAVE ROTATE, REFLECT, MOVE, AND ADD (TO ITEM LIST) OPERATIONS
 
@@ -186,14 +196,19 @@ class Component():      ## EACH COMPONENT SHOULD HAVE ROTATE, REFLECT, MOVE, AND
         self.make_vertex_list()
         return self
 
-    def plot(self):
-        plt.figure(figsize=(5,5))
+    def plot(self, ax=None, color='red'):
+        if ax is None:
+            fig, ax = plt.subplots(1, 1, figsize=(5,5))
         for i in range(self.vertex_list.shape[0]):
-            plt.fill(self.vertex_list[i,:,0], self.vertex_list[i,:,1], facecolor='none', edgecolor='red')
-        plt.show()
+            if self.params['type']=='scatter':
+                ax.scatter(self.vertex_list[i,:,0], self.vertex_list[i,:,1], color=color)
+            else:
+                ax.fill(self.vertex_list[i,:,0], self.vertex_list[i,:,1], facecolor='none', edgecolor=color)
+        if ax is None:
+            plt.show()
     
-    def export_items(self, filepath, filename):
-        filename = filepath + filename + '.csv'
+    def export_items(self, filepath):
+        filename = filepath + self.params['name'] + '.csv'
         with open(filename, 'w') as file:
             write = csv.writer(file)
             write.writerows(np.stack(self.items, axis=0).tolist())
@@ -203,6 +218,7 @@ class Transition(Component):
     def __init__(self, L_track, L_taper, L_tip, w_gap, w_track, w_tip, w1, w2, name='transition'):
         self.params = locals()
         self.params.pop('self')
+        self.params['type'] = 'polygon'
         self.items = []
         self.make_vertex_list()
 
@@ -234,8 +250,9 @@ class Transition(Component):
                                                vertex_list_upper[i,:][None,:] + deltas[i,:][None,:],
                                                axis = 0)
         
-        vertex_list_lower = ( Board.reflect_x(vertex_list_upper) - 
-                                    np.array([0, 2*self.params['w_gap'] + self.params['w_track']])[None,:]  )
+        vertex_list_lower = np.copy(vertex_list_upper)
+        vertex_list_lower = Board.reflect_x(self, vertex_list=vertex_list_lower[None,:,:])[0,:,:]
+        vertex_list_lower = Board.move(self, x=0, y=-(2*self.params['w_gap'] + self.params['w_track']), vertex_list=vertex_list_lower[None,:,:])[0,:,:]
 
         self.vertex_list = np.stack((vertex_list_upper, vertex_list_lower), axis=0)
 
@@ -245,6 +262,7 @@ class Termination(Component):
     def __init__(self, w_gap_top, L_track, L_taper, w_gap, w_track, w1, w2, name='termination'):
         self.params = locals()
         self.params.pop('self')
+        self.params['type'] = 'polygon'
         self.items = []
         self.make_vertex_list()
 
@@ -280,11 +298,20 @@ class Termination(Component):
                                         axis = 0)
         self.vertex_list = self.vertex_list[None,:,:]
 
+    def plot(self, ax=None, color='red'):
+        if ax is None:
+            fig, ax = plt.subplots(1, 1, figsize=(5,5))
+        for i in range(self.vertex_list.shape[0]):
+            ax.scatter(self.vertex_list[i,:,0], self.vertex_list[i,:,1], color=color)
+        if ax is None:
+            plt.show()
+
 class Choke(Component):
 
     def __init__(self, theta_filter, r_filter, choke_pad_diameter, name='choke', n_points_curve1=50, n_points_curve2=50, filter_scale=1.2):
         self.params = locals()
         self.params.pop('self')
+        self.params['type'] = 'polygon'
         self.items = []
         self.make_vertex_list()
 
@@ -328,6 +355,7 @@ class cELC(Component):
     def __init__(self, wx_cELC, wy_cELC, wx_gap, wy_gap, w_center, w_gap, w_arm1, w_arm2, cELC_varactor_gap, w_cELC_varactor, name='cELC'):
         self.params = locals()
         self.params.pop('self')
+        self.params['type'] = 'polygon'
         self.items = []
         self.make_vertex_list()
 
@@ -335,7 +363,7 @@ class cELC(Component):
         '''
         Constructs two ordered vertex lists describing cELC polygons, starting at top left and moving clockwise, origin at center.
         See dimension labels in companion figure
-        Creates two vertex lists: outer_vertex_list and inner_vertex_list
+        Creates two vertex polygons: outer vertex list and inner vertex list
         Uses self.params dictionary
         Required dictionary keys: wx_cELC, wy_cELC, wx_gap, wy_gap, w_center, w_gap, w_arm1, w_arm2, cELC_varactor_gap, w_cELC_varactor
         '''
@@ -382,5 +410,47 @@ class cELC(Component):
 
         self.vertex_list = np.stack((vertex_list_inner, vertex_list_outer), axis=0)
 
-        
+class SIW(Component):
 
+    def __init__(self, L_wg, w_wg, L_taper, L_track, w_wall, mode='closed', name='SIW'):
+        self.params = locals()
+        self.params.pop('self')
+        self.params['type'] = 'scatter'
+        self.items = []
+        self.make_vertex_list()
+
+    def make_vertex_list(self):
+        '''
+        Constructs two ordered vertex lists describing SIW polygon(s), starting at top left and moving clockwise, origin at center.
+        See dimension labels in companion figure
+        Creates one or two via lists, depending on mode.
+        Uses self.params dictionary
+        Required dictionary keys: L_wg, w_wg, L_taper, L_track, w_wall
+        mode: 'closed', 'open', 'half-open-left', or 'half-open-right' (string)
+        '''
+        x_start = 0
+        y_start = 0
+
+        vertex_list_1 = np.array([x_start, y_start])[None,:]
+
+        deltas = np.array([[self.params['L_track'], 0],
+                           [self.params['L_taper'], (self.params['w_wg'] - self.params['w_wall'])/2],
+                           [self.params['L_wg'], 0],
+                           [self.params['L_taper'], -(self.params['w_wg'] - self.params['w_wall'])/2],
+                           [self.params['L_track'], 0]
+                            ])
+        for i in range(deltas.shape[0]):
+            vertex_list_1 = np.append(vertex_list_1, 
+                                        vertex_list_1[i,:][None,:] + deltas[i,:][None,:],
+                                        axis=0)
+        vertex_list_2 = np.copy(vertex_list_1)
+        vertex_list_2 = Board.move(self, x=0, y=-self.params['w_wall'], vertex_list=Board.reflect_x(self, vertex_list=vertex_list_2[None,:,:]))[0,:,:]
+        vertex_list_2 = np.flip(vertex_list_2, axis=0)
+
+        if self.params['mode']=='open':
+            self.vertex_list = np.stack((vertex_list_1, vertex_list_2), axis=0)
+        elif self.params['mode']=='half-open-left' or self.params['mode']=='half-open-right':
+            self.vertex_list = np.append(vertex_list_1, vertex_list_2, axis=0)[None,:,:]
+        elif self.params['mode']=='closed':
+            self.vertex_list = np.append(vertex_list_1, vertex_list_2, axis=0)
+            self.vertex_list = np.append(self.vertex_list, np.array([x_start, y_start])[None,:], axis=0)[None,:,:]

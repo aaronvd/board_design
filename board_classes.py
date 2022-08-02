@@ -13,14 +13,14 @@ class Board():
 
         self.params = locals()
         self.params.pop('self')
-        self.items = []
+        self.items = {}
         self.corners = np.array([[0, 0], [0, self.params['Ly_board']],
                                  [self.params['Lx_board'], self.params['Ly_board']], 
                                  [self.params['Lx_board'], 0], 
                                  [0, 0]])
 
     def add(self, component):
-        self.items.append(component)
+        self.items[component.params['name']] = component
     
     def rotate(self, theta, point_list=None):
         '''
@@ -139,11 +139,11 @@ class Board():
         if ax is None:
             fig, ax = plt.subplots(1, 1)
         ax.fill(self.corners[:,0], self.corners[:,1], facecolor='none', edgecolor='black')
-        for i, item in enumerate(self.items):
+        for key, item in self.items.items():
             item.plot(ax=ax, color=next(iter(pool)), plot_type='all')
     
     def export_items(self, filepath):
-        for item in self.items:
+        for key, item in self.items:
             item.export_items(filepath)
 
     def __str__(self):
@@ -152,6 +152,11 @@ class Board():
         # print each data item.
         for key, value in self.params.items():
             param_table += '{:<25} {:<25}\n'.format(key, value)
+        comps = ''
+        for key, value in self.items.items():
+            comps = comps + key + '; '
+        param_table += '\n{:<25}\n'.format('COMPONENTS')
+        param_table += '{:<25}\n'.format(comps)
         return param_table
 
 class Component():      ## EACH COMPONENT SHOULD HAVE ROTATE, REFLECT, MOVE, AND ADD (TO ITEM LIST) OPERATIONS

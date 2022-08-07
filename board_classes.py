@@ -1,7 +1,7 @@
 import csv
+from itertools import cycle
 import numpy as np
 from matplotlib import pyplot as plt
-from itertools import cycle
 
 cm = 0.01
 
@@ -141,9 +141,14 @@ class Board():
         ax.fill(self.corners[:,0], self.corners[:,1], facecolor='none', edgecolor='black')
         for key, item in self.items.items():
             item.plot(ax=ax, color=next(iter(pool)), plot_type='all')
-    
+
+    def tolist(self):
+        for key, component in self.items.items():
+            component.tolist_items = [[polygon.tolist() for polygon in component_item] for component_item in component.items]
+
     def export_items(self, filepath):
-        for key, item in self.items:
+        self.tolist()
+        for key, item in self.items.items():
             item.export_items(filepath)
 
     def __str__(self):
@@ -241,10 +246,21 @@ class Component():      ## EACH COMPONENT SHOULD HAVE ROTATE, REFLECT, MOVE, AND
         plt.axis('equal')
     
     def export_items(self, filepath):
-        filename = filepath + self.params['name'] + '.csv'
+        filename = filepath + '/' + self.params['name'] + '.csv'
         with open(filename, 'w') as file:
             write = csv.writer(file)
-            write.writerows(np.stack(self.items, axis=0).tolist())
+            write.writerows(self.tolist_items)
+
+    def list_shape(nested_list):
+        dims = []
+        temp = nested_list
+        while True:
+            try:
+                dims.append(len(temp))
+                temp = temp[0]
+            except:
+                break
+        return dims
 
     def __str__(self):
         param_table = '{:<25} {:<25}\n'.format('PARAMETER', 'VALUE')     # print column names

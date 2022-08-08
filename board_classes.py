@@ -151,6 +151,17 @@ class Board():
         for key, item in self.items.items():
             item.export_items(filepath)
 
+    def list_shape(nested_list):
+        dims = []
+        temp = nested_list
+        while True:
+            try:
+                dims.append(len(temp))
+                temp = temp[0]
+            except:
+                break
+        return dims
+
     def __str__(self):
         param_table = '{:<25} {:<25}\n'.format('PARAMETER', 'VALUE')     # print column names
     
@@ -250,17 +261,6 @@ class Component():      ## EACH COMPONENT SHOULD HAVE ROTATE, REFLECT, MOVE, AND
         with open(filename, 'w') as file:
             write = csv.writer(file)
             write.writerows(self.tolist_items)
-
-    def list_shape(nested_list):
-        dims = []
-        temp = nested_list
-        while True:
-            try:
-                dims.append(len(temp))
-                temp = temp[0]
-            except:
-                break
-        return dims
 
     def __str__(self):
         param_table = '{:<25} {:<25}\n'.format('PARAMETER', 'VALUE')     # print column names

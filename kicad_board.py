@@ -1,3 +1,4 @@
+import os
 import pcbnew
 import csv
 import ast
@@ -8,10 +9,17 @@ degrees = 10.0      #kicad internal units are 0.1 degree
 class KiCadBoard():
 
     def __init__(self, filename=None):
+        self.board_data = {}
         if filename is None:
             self.BOARD = pcbnew.GetBoard()
         else:
             self.BOARD = pcbnew.LoadBoard(filename)
+        self.get_layertable()
+        self.nets = self.BOARD.GetNetsByName()
+        self.gnd_net = self.nets.find('GND').value()[1]
+        self.component_list = []
+        for module in self.BOARD.GetModules():
+            self.component_list.append(module.GetReference())
 
     def list_shape(self, nested_list):
         dims = []
@@ -33,12 +41,26 @@ class KiCadBoard():
             reader = csv.reader(csvfile, delimiter=',')
             for row in reader:
                 list1.append(row)
+
         try:
             list1 = [[float(v) for v in r] for r in list1]
         except:
             list1 = [[ast.literal_eval(i) for i in v] for v in list1]
-        print('List Dimensions:' + self.list_shape(list1))
+        
+        print('List Dimensions: {}'.format(self.list_shape(list1)))
         return list1
+
+    def load_data(self, data_directory):
+        with open('{}/board_params.csv'.format(data_directory), 'r') as infile:
+            r = csv.reader(infile)
+            self.params = {rows[0]:float(rows[1]) for rows in r if len(rows) == 2}
+        
+        positions_directory = '{}/Positions'.format(data_directory)
+        files = os.listdir(positions_directory)
+        for f in files:
+            data = f.split('.')
+            if data[1] == 'csv':
+                self.board_data[data[0]] = self.load_list('{}/{}'.format(positions_directory, f))
 
     def get_layertable(self):
         '''
@@ -106,6 +128,17 @@ class KiCadBoard():
         text.SetLayer(self.layertable[layer])
         self.BOARD.Add(text)
         
+        if refresh:
+            pcbnew.Refresh()
+
+    def move_module(self, module_reference, x, y, rotation=None, refresh=False):
+        module = self.BOARD.FindModuleByReference(module_reference)
+        position_temp = pcbnew.wxPoint(x*m, y*m)
+        module.SetPosition(position_temp)
+
+        if rotation is not None:
+            module.Rotate(position_temp, rotation*degrees)
+
         if refresh:
             pcbnew.Refresh()
 

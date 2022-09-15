@@ -1,4 +1,5 @@
 import csv
+import os
 from itertools import cycle
 import numpy as np
 from matplotlib import pyplot as plt
@@ -147,9 +148,20 @@ class Board():
             component.tolist_items = [[polygon.tolist() for polygon in component_item] for component_item in component.items]
 
     def export_items(self, filepath):
+        # export board parameters dictionary
+        filename = filepath + '/' + 'board_params.csv'
+        with open(filename, 'w') as file:
+            w = csv.writer(file)
+            for key, val in self.params.items():
+                w.writerow([key, val])
+        
+        positions_filepath = '{}/Positions'.format(filepath)
+        if not os.path.exists(positions_filepath):
+            os.makedirs(positions_filepath)
+        
         self.tolist()
         for key, item in self.items.items():
-            item.export_items(filepath)
+            item.export_items(positions_filepath)
 
     def list_shape(nested_list):
         dims = []
@@ -177,11 +189,14 @@ class Board():
 
 class Component():      ## EACH COMPONENT SHOULD HAVE ROTATE, REFLECT, MOVE, AND ADD (TO ITEM LIST) OPERATIONS
 
-    def __init__(self):
-        self.point_list = None
+    def __init__(self, name=None):
+        self.params = locals()
+        self.params.pop('self')
         self.items = []
+        self.make_point_list()
     
     def make_point_list(self):
+        self.point_list = [np.array([0, 0])[None,:]]
         return
 
     def rotate(self, theta):

@@ -9071,8 +9071,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.056568542"
-     inkscape:cx="-618.71843"
-     inkscape:cy="1078.3378"
+     inkscape:cx="441.94174"
+     inkscape:cy="2704.6835"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -9106,7 +9106,10 @@
        width="531.36584"
        height="484.60471"
        x="1023.8003"
-       y="460.37012" />
+       y="460.37012"
+       inkscape:export-filename="Diagrams\choke.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        id="rect35934"
        style="fill:#5689ba;fill-opacity:1;stroke:#000000;stroke-width:1.97909"
@@ -9147,7 +9150,10 @@
     <g
        id="g30759"
        clip-path="url(#clipPath33226)"
-       transform="translate(-4371.0673,-8016.875)">
+       transform="translate(-4371.0673,-8016.875)"
+       inkscape:export-filename="Diagrams\transition.png"
+       inkscape:export-xdpi="202.14"
+       inkscape:export-ydpi="202.14">
       <rect
          style="fill:#e3c157;fill-opacity:1;stroke:#000000;stroke-width:1.95355"
          id="rect34-58-5-1-8-6-3-4-41-8"
@@ -9180,21 +9186,21 @@
        transform="translate(-452.2018,706.0791)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7568"><tspan
+         id="tspan22910"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7566">w1 
+           id="tspan22908">w1 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7572"><tspan
+         id="tspan22914"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7570">
+           id="tspan22912">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7576"><tspan
+         id="tspan22918"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7574">
+           id="tspan22916">
 </tspan></tspan></text>
     <text
        xml:space="preserve"
@@ -9203,21 +9209,21 @@
        transform="translate(-528.1378,708.96)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7580"><tspan
+         id="tspan22922"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7578">w2 
+           id="tspan22920">w2 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7584"><tspan
+         id="tspan22926"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7582">
+           id="tspan22924">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7588"><tspan
+         id="tspan22930"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7586">
+           id="tspan22928">
 </tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2.211;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker25054-4-8-8-3-7-5-2-5);marker-end:url(#marker25054-4-8-8-3-7-5-2-5)"
@@ -9230,21 +9236,21 @@
        transform="translate(-560.3728,550.731)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7592"><tspan
+         id="tspan22934"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7590">L_taper 
+           id="tspan22932">L_taper 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7596"><tspan
+         id="tspan22938"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7594">
+           id="tspan22936">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7600"><tspan
+         id="tspan22942"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7598">
+           id="tspan22940">
 </tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2.211;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker25054-4-8-8-3-7-0-8-0-1);marker-end:url(#marker25054-4-8-8-3-7-0-8-0-1)"
@@ -9257,21 +9263,21 @@
        transform="translate(-659.224,708.4581)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7604"><tspan
+         id="tspan22946"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7602">w_track 
+           id="tspan22944">w_track 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7608"><tspan
+         id="tspan22950"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7606">
+           id="tspan22948">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7612"><tspan
+         id="tspan22954"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7610">
+           id="tspan22952">
 </tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2.211;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker25054-4-8-8-3-7-0-8-3-4-1);marker-end:url(#marker25054-4-8-8-3-7-0-8-3-4-1)"
@@ -9284,21 +9290,21 @@
        transform="translate(-641.7942,743.0019)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7616"><tspan
+         id="tspan22958"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7614">w_gap 
+           id="tspan22956">w_gap 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7620"><tspan
+         id="tspan22962"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7618">
+           id="tspan22960">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7624"><tspan
+         id="tspan22966"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7622">
+           id="tspan22964">
 </tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.83679;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker25054-4-8-8-3-7-5-6-3-7);marker-end:url(#marker25054-4-8-8-3-7-5-6-3-7)"
@@ -9311,21 +9317,21 @@
        transform="translate(-684.115,822.7396)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7628"><tspan
+         id="tspan22970"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7626">L_track
+           id="tspan22968">L_track
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7632"><tspan
+         id="tspan22974"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7630">
+           id="tspan22972">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7636"><tspan
+         id="tspan22978"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7634">
+           id="tspan22976">
 </tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.46051;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker25054-4-8-8-3-7-5-2-5-8);marker-end:url(#marker25054-4-8-8-3-7-5-2-5-8)"
@@ -9342,21 +9348,21 @@
        transform="rotate(-90.295078,108.38961,-174.83581)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7640"><tspan
+         id="tspan22982"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7638">w_tip
+           id="tspan22980">w_tip
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7644"><tspan
+         id="tspan22986"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7642">
+           id="tspan22984">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7648"><tspan
+         id="tspan22990"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7646">
+           id="tspan22988">
 </tspan></tspan></text>
     <text
        xml:space="preserve"
@@ -9365,21 +9371,21 @@
        transform="translate(-730.2162,677.5423)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7652"><tspan
+         id="tspan22994"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7650">L_tip
+           id="tspan22992">L_tip
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7656"><tspan
+         id="tspan22998"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7654">
+           id="tspan22996">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7660"><tspan
+         id="tspan23002"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7658">
+           id="tspan23000">
 </tspan></tspan></text>
     <path
        id="path30641"
@@ -9396,7 +9402,7 @@
        transform="matrix(5.4155091,0,0,5.4155091,612.4058,459.4318)"><tspan
          x="131.52344"
          y="28.265404"
-         id="tspan7662">r_filter</tspan></text>
+         id="tspan23004">r_filter</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.765;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.765, 1.765;stroke-dashoffset:0;stroke-opacity:1"
        d="m 1236.5427,655.6612 c 31.7917,-34.166 68.2394,-36.6714 110.0082,-2.9935"
@@ -9409,7 +9415,7 @@
        transform="matrix(5.4155091,0,0,5.4155091,493.0541,470.6571)"><tspan
          x="131.52344"
          y="28.265404"
-         id="tspan7664">theta_filter</tspan></text>
+         id="tspan23006">theta_filter</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2.11;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker25054-4-8-8-3-7-52-3-7);marker-end:url(#marker25054-4-8-8-3-7-52-3-7)"
        d="m 1300.054,698.1116 h -20.5306"
@@ -9421,11 +9427,14 @@
        transform="matrix(5.4155091,0,0,5.4155091,595.9529,555.2212)"><tspan
          x="131.52344"
          y="28.265404"
-         id="tspan7666">choke_pad_diameter</tspan></text>
+         id="tspan23008">choke_pad_diameter</tspan></text>
     <g
        id="g40152-3"
        clip-path="url(#clipPath40154-4)"
-       transform="translate(-3970.9298,-7934.5644)">
+       transform="translate(-3970.9298,-7934.5644)"
+       inkscape:export-filename="Diagrams\termination.png"
+       inkscape:export-xdpi="202.14"
+       inkscape:export-ydpi="202.14">
       <rect
          style="fill:#e3c157;fill-opacity:1;stroke:#000000;stroke-width:1.95355"
          id="rect34-58-5-1-8-6-3-4-41-7"
@@ -9506,21 +9515,21 @@
        transform="translate(1145.9584,776.2862)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7670"><tspan
+         id="tspan23012"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7668">w_wg 
+           id="tspan23010">w_wg 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7674"><tspan
+         id="tspan23016"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7672">
+           id="tspan23014">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7678"><tspan
+         id="tspan23020"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7676">
+           id="tspan23018">
 </tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2.211;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker25054-4-8-8-3-7-0-1);marker-end:url(#marker25054-4-8-8-3-7-0-1)"
@@ -9537,21 +9546,21 @@
        transform="translate(940.8846,767.2862)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7682"><tspan
+         id="tspan23024"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7680">w1 
+           id="tspan23022">w1 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7686"><tspan
+         id="tspan23028"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7684">
+           id="tspan23026">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7690"><tspan
+         id="tspan23032"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7688">
+           id="tspan23030">
 </tspan></tspan></text>
     <text
        xml:space="preserve"
@@ -9560,21 +9569,21 @@
        transform="translate(873.9699,777.8502)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7694"><tspan
+         id="tspan23036"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7692">w2 
+           id="tspan23034">w2 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7698"><tspan
+         id="tspan23040"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7696">
+           id="tspan23038">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7702"><tspan
+         id="tspan23044"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7700">
+           id="tspan23042">
 </tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2.211;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker25054-4-8-8-3-7-5-0);marker-end:url(#marker25054-4-8-8-3-7-5-0)"
@@ -9587,21 +9596,21 @@
        transform="translate(829.6474,614.1474)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7706"><tspan
+         id="tspan23048"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7704">L_taper 
+           id="tspan23046">L_taper 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7710"><tspan
+         id="tspan23052"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7708">
+           id="tspan23050">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7714"><tspan
+         id="tspan23056"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7712">
+           id="tspan23054">
 </tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2.211;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker25054-4-8-8-3-7-0-8-6);marker-end:url(#marker25054-4-8-8-3-7-0-8-6)"
@@ -9614,21 +9623,21 @@
        transform="translate(696.8205,769.6652)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7718"><tspan
+         id="tspan23060"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7716">w_track 
+           id="tspan23058">w_track 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7722"><tspan
+         id="tspan23064"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7720">
+           id="tspan23062">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7726"><tspan
+         id="tspan23068"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7724">
+           id="tspan23066">
 </tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2.211;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker25054-4-8-8-3-7-0-8-3-0);marker-end:url(#marker25054-4-8-8-3-7-0-8-3-0)"
@@ -9641,21 +9650,21 @@
        transform="translate(756.1393,802.9972)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7730"><tspan
+         id="tspan23072"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7728">w_gap 
+           id="tspan23070">w_gap 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7734"><tspan
+         id="tspan23076"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7732">
+           id="tspan23074">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7738"><tspan
+         id="tspan23080"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7736">
+           id="tspan23078">
 </tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2.211;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker25054-4-8-8-3-7-5-9-7);marker-end:url(#marker25054-4-8-8-3-7-5-9-7)"
@@ -9668,21 +9677,21 @@
        transform="translate(595.4628,688.358)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7742"><tspan
+         id="tspan23084"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7740">w_gap_top 
+           id="tspan23082">w_gap_top 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7746"><tspan
+         id="tspan23088"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7744">
+           id="tspan23086">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7750"><tspan
+         id="tspan23092"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7748">
+           id="tspan23090">
 </tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.65186;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker25054-4-8-8-3-7-5-6-8);marker-end:url(#marker25054-4-8-8-3-7-5-6-8)"
@@ -9699,21 +9708,21 @@
        transform="translate(724.619,887.1402)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7754"><tspan
+         id="tspan23096"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7752">L_CPW
+           id="tspan23094">L_CPW
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7758"><tspan
+         id="tspan23100"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7756">
+           id="tspan23098">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7762"><tspan
+         id="tspan23104"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7760">
+           id="tspan23102">
 </tspan></tspan></text>
     <text
        xml:space="preserve"
@@ -9722,21 +9731,21 @@
        transform="translate(430.9409,772.0102)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7766"><tspan
+         id="tspan23108"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7764">w_CPW_wall
+           id="tspan23106">w_CPW_wall
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7770"><tspan
+         id="tspan23112"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7768">
+           id="tspan23110">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7774"><tspan
+         id="tspan23116"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7772">
+           id="tspan23114">
 </tspan></tspan></text>
     <text
        xml:space="preserve"
@@ -9745,21 +9754,21 @@
        transform="translate(721.1653,696.9445)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7778"><tspan
+         id="tspan23120"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7776">L_track 
+           id="tspan23118">L_track 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7782"><tspan
+         id="tspan23124"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7780">
+           id="tspan23122">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7786"><tspan
+         id="tspan23128"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7784">
+           id="tspan23126">
 </tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2.70695;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker25054-4-8-8-3-7-5-1-8);marker-end:url(#marker25054-4-8-8-3-7-5-1-8)"
@@ -9776,21 +9785,21 @@
        transform="translate(570.8664,635.9575)"><tspan
          x="119.73633"
          y="-913.40089"
-         id="tspan7790"><tspan
+         id="tspan23132"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7788">terminator_fence_offset 
+           id="tspan23130">terminator_fence_offset 
 </tspan></tspan><tspan
          x="119.73633"
          y="-881.08564"
-         id="tspan7794"><tspan
+         id="tspan23136"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7792">
+           id="tspan23134">
 </tspan></tspan><tspan
          x="119.73633"
          y="-848.7704"
-         id="tspan7798"><tspan
+         id="tspan23140"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7796">
+           id="tspan23138">
 </tspan></tspan></text>
     <circle
        style="fill:#e3c157;stroke:#74222f;stroke-width:2.11;stroke-opacity:1"
@@ -9798,36 +9807,16 @@
        cx="776.75342"
        cy="-98.664062"
        r="6.3499999" />
-    <text
-       xml:space="preserve"
-       id="text68416-0-8-2-7-8-9-0-8-0"
-       style="font-style:normal;font-weight:normal;font-size:25.4px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect68418-5-3-8-0-3-3-9-6-4);display:inline;fill:#000000;fill-opacity:1;stroke:none"
-       transform="translate(788.4426,430.9931)"><tspan
-         x="119.73633"
-         y="-913.40089"
-         id="tspan7802"><tspan
-           style="font-weight:bold;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman,  Bold'"
-           id="tspan7800">(CTH0603)
-</tspan></tspan><tspan
-         x="119.73633"
-         y="-880.97682"
-         id="tspan7806"><tspan
-           style="font-weight:bold;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman,  Bold'"
-           id="tspan7804">
-</tspan></tspan><tspan
-         x="119.73633"
-         y="-848.55274"
-         id="tspan7810"><tspan
-           style="font-weight:bold;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman,  Bold'"
-           id="tspan7808">
-</tspan></tspan></text>
     <rect
        style="fill:#e3c157;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect847"
        width="442.13763"
        height="442.13763"
        x="-1456.043"
-       y="409.44727" />
+       y="409.44727"
+       inkscape:export-filename="Diagrams\cELC.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        id="rect847-5"
        style="fill:#5689ba;fill-opacity:1;stroke:#000000;stroke-width:1.2;stroke-miterlimit:4;stroke-dasharray:none"
@@ -9904,9 +9893,9 @@
        transform="matrix(5.4155091,0,0,5.4155091,-1882.0885,488.9287)"><tspan
          x="131.52344"
          y="28.359614"
-         id="tspan7814"><tspan
+         id="tspan23144"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';shape-inside:url(#rect3635-1)"
-           id="tspan7812">w_arm2</tspan></tspan></text>
+           id="tspan23142">w_arm2</tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.43285px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker3643);marker-end:url(#marker3794-8)"
        d="m -1306.6175,711.3709 c -0.9976,39.5963 -0.9976,49.7281 -0.9976,49.7281"
@@ -9918,9 +9907,9 @@
        transform="matrix(5.4155091,0,0,5.4155091,-2010.5909,587.493)"><tspan
          x="131.52344"
          y="28.359614"
-         id="tspan7818"><tspan
+         id="tspan23148"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';shape-inside:url(#rect3635-0-8)"
-           id="tspan7816">w_arm1</tspan></tspan></text>
+           id="tspan23146">w_arm1</tspan></tspan></text>
     <text
        xml:space="preserve"
        id="text3633-2-1"
@@ -9928,9 +9917,9 @@
        transform="matrix(5.4155091,0,0,5.4155091,-1913.668,632.5349)"><tspan
          x="131.52344"
          y="28.359614"
-         id="tspan7822"><tspan
+         id="tspan23152"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7820">cELC_varactor_gap</tspan></tspan></text>
+           id="tspan23150">cELC_varactor_gap</tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:1.23623px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker3981);marker-end:url(#marker4144-0)"
        d="M -1092.7277,500.9481 V 759.9783"
@@ -9984,16 +9973,19 @@
        transform="matrix(5.4155091,0,0,5.4155091,-2019.4112,682.2345)"><tspan
          x="131.52344"
          y="28.359614"
-         id="tspan7826"><tspan
+         id="tspan23156"><tspan
            style="font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, '"
-           id="tspan7824">w_cELC_varactor</tspan></tspan></text>
+           id="tspan23154">w_cELC_varactor</tspan></tspan></text>
     <rect
        style="opacity:0.999;fill:#e3c157;fill-opacity:1;stroke:#000000;stroke-width:0.586837"
        id="rect76931"
        width="1119.5348"
        height="240.9319"
        x="-608.43945"
-       y="469.81348" />
+       y="469.81348"
+       inkscape:export-filename="Diagrams\SIW.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;stroke:#000000;stroke-width:3.329;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3.329, 9.98698;stroke-dashoffset:0;stroke-opacity:1"
        d="m -474.454,574.2972 h 47.044 l 23.533,-15.7092 h 798.565 l 25.65,15.7092 h 47.043 v 26.4017 h -47.043 l -25.65,17.103 h -798.565 l -23.533,-17.103 h -47.044 z"

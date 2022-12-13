@@ -16,7 +16,8 @@ class KiCadBoard():
             self.BOARD = pcbnew.LoadBoard(filename)
         self.get_layertable()
         self.nets = self.BOARD.GetNetsByName()
-        self.gnd_net = self.nets.find('GND').value()[1]
+        if 'GND' in [str(i) for i in self.nets.keys()]:
+            self.gnd_net = self.nets.find('GND').value()[1]
         self.component_list = []
         for module in self.BOARD.GetModules():
             self.component_list.append(module.GetReference())

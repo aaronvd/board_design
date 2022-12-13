@@ -406,9 +406,8 @@ class Choke(Component):
                                                     np.array([self.params['r_filter'] * np.cos(theta_list1[0]),
                                                             self.params['r_filter'] * np.sin(theta_list1[0])])[None,:], axis=0)
         
-        filter_scale = 1.2
-        point_list_outer = filter_scale * point_list_inner
-        filter_r_gap = filter_scale * self.params['r_filter'] - self.params['r_filter']
+        point_list_outer = self.params['filter_scale'] * point_list_inner
+        filter_r_gap = self.params['filter_scale'] * self.params['r_filter'] - self.params['r_filter']
         point_list_outer = point_list_outer - np.array([0, filter_r_gap/2])[None,:]
 
         self.params['filter_r_gap'] = filter_r_gap
@@ -511,27 +510,44 @@ class SIW(Component):
 
         point_list_1 = np.array([x_start, y_start])[None,:]
 
-        deltas = np.array([[self.params['L_track'], 0],
-                           [self.params['L_taper'], (self.params['w_wg'] - self.params['w_wall'])/2],
-                           [self.params['L_wg'], 0],
-                           [self.params['L_taper'], -(self.params['w_wg'] - self.params['w_wall'])/2],
-                           [self.params['L_track'], 0]
-                            ])
-        for i in range(deltas.shape[0]):
-            point_list_1 = np.append(point_list_1, 
-                                        point_list_1[i,:][None,:] + deltas[i,:][None,:],
-                                        axis=0)
-        point_list_2 = np.copy(point_list_1)
-        point_list_2 = Board.move(self, x=0, y=-self.params['w_wall'], point_list=Board.reflect_x(self, point_list=point_list_2[None,:,:]))[0,:,:]
-        point_list_2 = np.flip(point_list_2, axis=0)
+        if self.params['mode'] == 'reflect':
+            deltas = np.array([[self.params['L_track'], 0],
+                               [self.params['L_taper'], (self.params['w_wg'] - self.params['w_wall'])/2],
+                               [self.params['L_wg'], 0],
+                               [0, -self.params['w_wg']],
+                               [-self.params['L_wg'], 0],
+                               [-self.params['L_taper'], (self.params['w_wg'] - self.params['w_wall'])/2],
+                               [-self.params['L_track'], 0]
+                               ])
+            for i in range(deltas.shape[0]):
+                point_list_1 = np.append(point_list_1, 
+                                            point_list_1[i,:][None,:] + deltas[i,:][None,:],
+                                            axis=0)
+            self.point_list = [point_list_1]
+        else:
+            deltas = np.array([[self.params['L_track'], 0],
+                            [self.params['L_taper'], (self.params['w_wg'] - self.params['w_wall'])/2],
+                            [self.params['L_wg'], 0],
+                            [self.params['L_taper'], -(self.params['w_wg'] - self.params['w_wall'])/2],
+                            [self.params['L_track'], 0]
+                                ])
+            for i in range(deltas.shape[0]):
+                point_list_1 = np.append(point_list_1, 
+                                            point_list_1[i,:][None,:] + deltas[i,:][None,:],
+                                            axis=0)
+            point_list_2 = np.copy(point_list_1)
+            point_list_2 = Board.move(self, x=0, y=-self.params['w_wall'], point_list=Board.reflect_x(self, point_list=point_list_2[None,:,:]))[0,:,:]
+            point_list_2 = np.flip(point_list_2, axis=0)
 
-        if self.params['mode']=='open':
-            self.point_list = [point_list_1, point_list_2]
-        elif self.params['mode']=='half-open-left' or self.params['mode']=='half-open-right':
-            self.point_list = [np.append(point_list_1, point_list_2, axis=0)]
-        elif self.params['mode']=='closed':
-            point_list = np.append(point_list_1, point_list_2, axis=0)
-            self.point_list = [np.append(point_list, np.array([x_start, y_start])[None,:], axis=0)]
+            if self.params['mode']=='open':
+                self.point_list = [point_list_1, point_list_2]
+            elif self.params['mode']=='half-open-left':
+                self.point_list = [np.append(point_list_1, point_list_2, axis=0)]
+            elif self.params['mode']=='half-open-right':
+                self.point_list = [np.append(point_list_2, point_list_1, axis=0)]
+            elif self.params['mode']=='closed':
+                point_list = np.append(point_list_1, point_list_2, axis=0)
+                self.point_list = [np.append(point_list, np.array([x_start, y_start])[None,:], axis=0)]
         
         self.vertex_to_endpoints()
         self.make_via_list()

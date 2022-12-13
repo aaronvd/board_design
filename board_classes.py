@@ -158,6 +158,12 @@ class Board():
         positions_filepath = '{}/Positions'.format(filepath)
         if not os.path.exists(positions_filepath):
             os.makedirs(positions_filepath)
+
+        # export board corners
+        filename = positions_filepath + '/' + 'board_corners.csv'
+        with open(filename, 'w') as file:
+            write = csv.writer(file)
+            write.writerows(self.corners.tolist())
         
         self.tolist()
         for key, item in self.items.items():

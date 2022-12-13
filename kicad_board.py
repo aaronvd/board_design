@@ -55,6 +55,8 @@ class KiCadBoard():
         with open('{}/board_params.csv'.format(data_directory), 'r') as infile:
             r = csv.reader(infile)
             self.params = {rows[0]:float(rows[1]) for rows in r if len(rows) == 2}
+
+        self.corners = self.load_list('{}/Positions/board_corners.csv'.format(data_directory))
         
         positions_directory = '{}/Positions'.format(data_directory)
         files = os.listdir(positions_directory)

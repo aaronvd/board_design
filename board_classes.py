@@ -15,10 +15,10 @@ class Board():
         self.params = locals()
         self.params.pop('self')
         self.items = {}
-        self.corners = np.array([[0, 0], [0, self.params['Ly_board']],
+        self.corners = [np.array([[0, 0], [0, self.params['Ly_board']],
                                  [self.params['Lx_board'], self.params['Ly_board']], 
                                  [self.params['Lx_board'], 0], 
-                                 [0, 0]])
+                                 [0, 0]])]
 
     def add(self, component):
         self.items[component.params['name']] = component
@@ -139,7 +139,8 @@ class Board():
 
         if ax is None:
             fig, ax = plt.subplots(1, 1)
-        ax.fill(self.corners[:,0], self.corners[:,1], facecolor='none', edgecolor='black')
+        for i in range(len(self.corners)):
+            ax.fill(self.corners[i][:,0], self.corners[i][:,1], facecolor='none', edgecolor='black')
         for key, item in self.items.items():
             item.plot(ax=ax, color=next(iter(pool)), plot_type='all')
 
@@ -161,9 +162,12 @@ class Board():
 
         # export board corners
         filename = positions_filepath + '/' + 'board_corners.csv'
+        corner_list = []
+        for i in range(len(self.corners)):
+            corner_list.append(self.corners[i].tolist())
         with open(filename, 'w') as file:
             write = csv.writer(file)
-            write.writerows(self.corners.tolist())
+            write.writerows(corner_list)
         
         self.tolist()
         for key, item in self.items.items():
@@ -497,6 +501,7 @@ class SIW(Component):
 
     def __init__(self, L_wg, w_wg, L_taper, L_track, w_wall, pitch, even=True, mode='closed', name='SIW'):
         self.params = locals()
+        self.params['Lx_tot'] = L_wg + 2*L_taper + 2*L_track
         self.params.pop('self')
         self.params['type'] = 'scatter'
         self.items = []
@@ -573,7 +578,7 @@ class SIW(Component):
                 endpoint_array[j,:,:] = np.transpose(np.array([self.point_list[i][j,:], self.point_list[i][j+1,:]]))
             self.endpoint_list.append(endpoint_array)
                         
-    def make_via_list(self):
+    def make_via_list(self, omit_startpoint=True):
         '''
         Generates N x 2 array of via positions from N_lines x (x, y) x (start, end) array of line segments.
 
@@ -603,5 +608,7 @@ class SIW(Component):
                     points_temp = np.append(points_temp, new_point[None,:], axis=0)
 
                 point_array = np.append(point_array, points_temp, axis=0)
+            if omit_startpoint:
+                point_array = point_array[1:,:]
             self.point_list.append(point_array)
 

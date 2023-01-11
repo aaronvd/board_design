@@ -134,10 +134,13 @@ class KiCadBoard():
         if refresh:
             pcbnew.Refresh()
 
-    def move_module(self, module_reference, x, y, rotation=None, refresh=False):
+    def move_module(self, module_reference, x, y, rotation=None, flip=False, refresh=False):
         module = self.BOARD.FindModuleByReference(module_reference)
         position_temp = pcbnew.wxPoint(x*m, y*m)
         module.SetPosition(position_temp)
+
+        if flip:
+            module.Flip(position_temp)
 
         if rotation is not None:
             module.Rotate(position_temp, rotation*degrees)
@@ -191,7 +194,8 @@ class KiCadBoard():
         zone.SetLayer(self.layertable[layer])
         zone.SetIsKeepout(keepout)
         zone.SetDoNotAllowCopperPour(keepout)
-        zone.SetNet(net)
+        if net is not None:
+            zone.SetNet(net)
         zone.thisown = 0
         
         self.BOARD.Add(zone)

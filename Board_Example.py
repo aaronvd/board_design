@@ -1,6 +1,6 @@
 '''
 Example script demonstrating usage of the kicad_board module.
-Execute from within KiCad's Python with execfile('Board_Example.py')
+Execute from within KiCad's Python with 'import Board_Example'
 '''
 import sys
 sys.path.append('..')
@@ -49,13 +49,21 @@ for i in range(len(varactor_list)):
     board.move_module(varactor_list[i], 
                       board.board_data['varactor'][i][0][0][0],
                       board.board_data['varactor'][i][0][0][1],
-                      rotation=None)
+                      rotation=0,
+                      flip=True)
 
 header_list = [i for i in board.component_list if i.startswith('J')]
 board.move_module(header_list[0],
                   board.params['Lx_board']/2,
                   board.params['Ly_board']/8)
 pcbnew.Refresh()
+
+######################################################################
+
+##                          Place test                              ##
+
+######################################################################
+board.write_text('Example Board', board.params['Lx_board']/2, board.params['Ly_board']-board.params['Ly_board']/8, refresh=True)
 
 ######################################################################
 

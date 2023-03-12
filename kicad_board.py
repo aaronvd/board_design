@@ -19,7 +19,7 @@ class KiCadBoard():
         if 'GND' in [str(i) for i in self.nets.keys()]:
             self.gnd_net = self.nets.find('GND').value()[1]
         self.component_list = []
-        for module in self.BOARD.GetModules():
+        for module in self.BOARD.GetFootprints():
             self.component_list.append(module.GetReference())
 
     def list_shape(self, nested_list):
@@ -80,27 +80,28 @@ class KiCadBoard():
         '''
         edgecut = self.layertable['Edge.Cuts']
         for i in range(len(corner_list)-1):
-            seg = pcbnew.DRAWSEGMENT(self.BOARD)
-            self.BOARD.Add(seg)
-            seg.SetStart(pcbnew.wxPoint(corner_list[i][0]*m, corner_list[i][1]*m))
-            seg.SetEnd(pcbnew.wxPoint(corner_list[i+1][0]*m, corner_list[i+1][1]*m))
+            seg = pcbnew.PCB_SHAPE(self.BOARD)
+            seg.SetShape(pcbnew.SHAPE_T_SEGMENT)
+            seg.SetStart(pcbnew.VECTOR2I(pcbnew.wxPoint(int(corner_list[i][0]*m), int(corner_list[i][1]*m))))
+            seg.SetEnd(pcbnew.VECTOR2I(pcbnew.wxPoint(int(corner_list[i+1][0]*m), int(corner_list[i+1][1]*m))))
             seg.SetLayer(edgecut)
+            self.BOARD.Add(seg)
 
         if refresh:
             pcbnew.Refresh()
 
     def add_via(self, x, y, via_diameter, top_layer, bottom_layer, net, via_width, via_type='through', refresh=False):
-        newvia = pcbnew.VIA(self.BOARD)
-        self.BOARD.Add(newvia)
-        newvia.SetPosition(pcbnew.wxPoint(x*m, y*m))
+        newvia = pcbnew.PCB_VIA(self.BOARD)
+        newvia.SetPosition(pcbnew.VECTOR2I(pcbnew.wxPoint(x*m, y*m)))
         if via_type == 'through':
-            newvia.SetViaType(pcbnew.VIA_THROUGH)
+            newvia.SetViaType(pcbnew.VIATYPE_THROUGH)
         elif via_type == 'blind':
-            newvia.SetViaType(pcbnew.VIA_BLIND_BURIED)
+            newvia.SetViaType(pcbnew.VIATYPE_BLIND_BURIED)
         newvia.SetDrill(int(via_diameter*m))
         newvia.SetWidth(int(via_width*m))
         newvia.SetNet(net)
-        newvia.SetLayerPair(self.layertable[top_layer], self.layertable[bottom_layer]) #THIS NEEDS TO GO LAST
+        newvia.SetLayerPair(self.layertable[top_layer], self.layertable[bottom_layer]) 
+        self.BOARD.Add(newvia)
         
         if refresh:
             pcbnew.Refresh()
@@ -112,22 +113,22 @@ class KiCadBoard():
         io = pcbnew.PCB_IO()
         mod = io.FootprintLoad(footprint_lib, component_name)
         pt = pcbnew.wxPoint(x*m, y*m)
-        mod.SetPosition(pt)
+        mod.SetPosition(pcbnew.VECTOR2I(pt))
         self.BOARD.Add(mod)
         
         if refresh:
             pcbnew.Refresh()
 
-    def write_text(self, text_string, text_x, text_y, size=0.003, thickness=.00015, rotation=180, layer="F.SilkS", refresh=False):
+    def write_text(self, text_string, text_x, text_y, size=0.003, thickness=.00015, rotation=180, layer="F.Silkscreen", refresh=False):
         '''
         Places text on front silkscreen layer (by default)
         '''
-        text = pcbnew.TEXTE_PCB(self.BOARD)
+        text = pcbnew.PCB_TEXT(self.BOARD)
         text.SetText(text_string)
-        text.SetPosition(pcbnew.wxPoint(text_x*m, text_y*m))
-        text.Rotate(pcbnew.wxPoint(text_x*m, text_y*m), rotation*degrees)
-        text.SetTextSize(pcbnew.wxSize(size*m, size*m))
-        text.SetThickness(int(thickness*m))
+        position_temp = pcbnew.VECTOR2I(pcbnew.wxPoint(text_x*m, text_y*m))
+        text.SetPosition(position_temp)
+        text.SetTextAngle(pcbnew.EDA_ANGLE(rotation, pcbnew.DEGREES_T))
+        text.SetTextSize(pcbnew.VECTOR2I(pcbnew.wxSize(size*m, size*m)))
         text.SetLayer(self.layertable[layer])
         self.BOARD.Add(text)
         
@@ -135,15 +136,15 @@ class KiCadBoard():
             pcbnew.Refresh()
 
     def move_module(self, module_reference, x, y, rotation=None, flip=False, refresh=False):
-        module = self.BOARD.FindModuleByReference(module_reference)
-        position_temp = pcbnew.wxPoint(x*m, y*m)
+        module = self.BOARD.FindFootprintByReference(module_reference)
+        position_temp = pcbnew.VECTOR2I(pcbnew.wxPoint(x*m, y*m))
         module.SetPosition(position_temp)
 
         if flip:
-            module.Flip(position_temp)
+            module.Flip(position_temp, False)
 
         if rotation is not None:
-            module.Rotate(position_temp, rotation*degrees)
+            module.SetOrientation(pcbnew.EDA_ANGLE(rotation, pcbnew.DEGREES_T))
 
         if refresh:
             pcbnew.Refresh()
@@ -159,9 +160,9 @@ class KiCadBoard():
         end_x = endpoints_array[1][0]
         end_y = endpoints_array[1][1]
 
-        track = pcbnew.TRACK(self.BOARD)
-        track.SetStart(pcbnew.wxPoint(start_x*m, start_y*m))
-        track.SetEnd(pcbnew.wxPoint(end_x*m, end_y*m))
+        track = pcbnew.PCB_TRACK(self.BOARD)
+        track.SetStart(pcbnew.VECTOR2I(pcbnew.wxPoint(start_x*m, start_y*m)))
+        track.SetEnd(pcbnew.VECTOR2I(pcbnew.wxPoint(end_x*m, end_y*m)))
         track.SetWidth(int(trace_width*m))
         track.SetLayer(self.layertable[layer])
         track.SetNet(net)
@@ -189,10 +190,9 @@ class KiCadBoard():
         if not isinstance(vertex_array, pcbnew.SHAPE_POLY_SET):
             vertex_array = self.make_outline(vertex_array)
         
-        zone = pcbnew.ZONE_CONTAINER(self.BOARD)
+        zone = pcbnew.ZONE(self.BOARD)
         zone.SetOutline(vertex_array)
         zone.SetLayer(self.layertable[layer])
-        zone.SetIsKeepout(keepout)
         zone.SetDoNotAllowCopperPour(keepout)
         if net is not None:
             zone.SetNet(net)

@@ -151,7 +151,7 @@ class Board():
     def export_items(self, filepath):
         # export board parameters dictionary
         filename = filepath + '/' + 'board_params.csv'
-        with open(filename, 'w') as file:
+        with open(filename, 'w', newline='') as file:
             w = csv.writer(file)
             for key, val in self.params.items():
                 w.writerow([key, val])
@@ -283,7 +283,7 @@ class Component():      ## EACH COMPONENT SHOULD HAVE ROTATE, REFLECT, MOVE, AND
     
     def export_items(self, filepath):
         filename = filepath + '/' + self.params['name'] + '.csv'
-        with open(filename, 'w') as file:
+        with open(filename, 'w', newline='') as file:
             write = csv.writer(file)
             write.writerows(self.tolist_items)
 

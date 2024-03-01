@@ -612,3 +612,60 @@ class SIW(Component):
                 point_array = point_array[1:,:]
             self.point_list.append(point_array)
 
+class Patch(Component):
+
+    def __init__(self, W, L, W_is, L_is, W_ms, L_ms, keepout_ratio, name='patch'):
+        self.params = locals()
+        self.params.pop('self')
+        self.params['type'] = 'polygon'
+        self.items = []
+        self.make_point_list()
+
+    def make_point_list(self):
+        '''
+        Constructs two ordered vertex lists describing the patch polygon and a keepout region, starting at top left and moving clockwise, origin at center.
+        See dimension labels in companion figure.
+        Creates two vertex polygons: outer vertex list and inner vertex list
+        Uses self.params dictionary
+        Required dictionary keys: W, L, W_is, L_is, L_ms, keepout_ratio
+        '''
+
+        x_start = -self.params['W']/2
+        y_start = self.params['L']/2
+        point_list_inner = np.array([x_start, y_start])[None,:]
+        deltas = np.array([[self.params['W'], 0],
+                           [0, -self.params['L']],
+                           [-(self.params['W']-2*self.params['W_is']-self.params['W_ms'])/2, 0],
+                           [0, self.params['L_is']],
+                           [-self.params['W_is'], 0],
+                           [0, -self.params['L_is']-self.params['L_ms']],
+                           [-self.params['W_ms'], 0],
+                           [0, self.params['L_is']+self.params['L_ms']],
+                           [-self.params['W_is'], 0],
+                           [0, -self.params['L_is']],
+                           [-(self.params['W']-2*self.params['W_is']-self.params['W_ms'])/2, 0],
+                           [0, self.params['L']],
+                            ])
+        for i in range(deltas.shape[0]):
+            point_list_inner = np.append(point_list_inner, 
+                                        point_list_inner[i,:][None,:] + deltas[i,:][None,:],
+                                        axis = 0)
+
+        x_start = -self.params['W']/2 * self.params['keepout_ratio']
+        y_start = self.params['L']/2 * self.params['keepout_ratio']
+        point_list_outer = np.array([x_start, y_start])[None,:]
+        deltas = np.array([[self.params['W'], 0],
+                           [0, -self.params['L']],
+                           [-(self.params['W']-self.params['W_ms'])/2, 0],
+                           [0, -self.params['L_ms']],
+                           [-self.params['W_ms'], 0],
+                           [0, self.params['L_ms']],
+                           [-(self.params['W']-self.params['W_ms'])/2, 0],
+                           [0, self.params['L']],
+                            ]) * self.params['keepout_ratio']
+        for i in range(deltas.shape[0]):
+            point_list_outer = np.append(point_list_outer, 
+                                        point_list_outer[i,:][None,:] + deltas[i,:][None,:],
+                                        axis = 0)
+
+        self.point_list = [point_list_inner, point_list_outer]

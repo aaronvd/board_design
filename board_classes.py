@@ -656,11 +656,7 @@ class Patch(Component):
         point_list_outer = np.array([x_start, y_start])[None,:]
         deltas = np.array([[self.params['W'], 0],
                            [0, -self.params['L']],
-                           [-(self.params['W']-self.params['W_ms'])/2, 0],
-                           [0, -self.params['L_ms']],
-                           [-self.params['W_ms'], 0],
-                           [0, self.params['L_ms']],
-                           [-(self.params['W']-self.params['W_ms'])/2, 0],
+                           [-self.params['W'], 0],
                            [0, self.params['L']],
                             ]) * self.params['keepout_ratio']
         for i in range(deltas.shape[0]):

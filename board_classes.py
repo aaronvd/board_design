@@ -165,7 +165,7 @@ class Board():
         corner_list = []
         for i in range(len(self.corners)):
             corner_list.append(self.corners[i].tolist())
-        with open(filename, 'w') as file:
+        with open(filename, 'w', newline='') as file:
             write = csv.writer(file)
             write.writerows(corner_list)
         

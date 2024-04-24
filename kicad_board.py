@@ -112,8 +112,7 @@ class KiCadBoard():
         '''
         Adds component corresponding to component_name from library footprint_lib at position (x, y)
         '''
-        io = pcbnew.PCB_IO()
-        mod = io.FootprintLoad(footprint_lib, component_name)
+        mod = pcbnew.FootprintLoad(footprint_lib, component_name)
         pt = pcbnew.wxPoint(x*m, y*m)
         mod.SetPosition(pcbnew.VECTOR2I(pt))
         self.BOARD.Add(mod)

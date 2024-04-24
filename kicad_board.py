@@ -52,11 +52,13 @@ class KiCadBoard():
         return list1
 
     def load_data(self, data_directory):
-        with open('{}/board_params.csv'.format(data_directory), 'r') as infile:
-            r = csv.reader(infile)
-            self.params = {rows[0]:float(rows[1]) for rows in r if len(rows) == 2}
+        if 'board_params.csv' in os.listdir(data_directory):
+            with open('{}/board_params.csv'.format(data_directory), 'r') as infile:
+                r = csv.reader(infile)
+                self.params = {rows[0]:float(rows[1]) for rows in r if len(rows) == 2}
 
-        self.corners = self.load_list('{}/Positions/board_corners.csv'.format(data_directory))
+        if 'board_corners.csv' in os.listdir('{}/Positions'.format(data_directory)):
+            self.corners = self.load_list('{}/Positions/board_corners.csv'.format(data_directory))
         
         positions_directory = '{}/Positions'.format(data_directory)
         files = os.listdir(positions_directory)

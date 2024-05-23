@@ -59,6 +59,8 @@ class KiCadBoard():
 
         if 'board_corners.csv' in os.listdir('{}/Positions'.format(data_directory)):
             self.corners = self.load_list('{}/Positions/board_corners.csv'.format(data_directory))
+        if 'board_corners_design.csv' in os.listdir('{}/Positions'.format(data_directory)):
+            self.corners_design = self.load_list('{}/Positions/board_corners_design.csv'.format(data_directory))
         
         positions_directory = '{}/Positions'.format(data_directory)
         files = os.listdir(positions_directory)

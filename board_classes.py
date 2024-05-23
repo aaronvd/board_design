@@ -19,6 +19,10 @@ class Board():
                                  [self.params['Lx_board']+self.params['edge_offset'], self.params['Ly_board']+self.params['edge_offset']], 
                                  [self.params['Lx_board']+self.params['edge_offset'], -self.params['edge_offset']], 
                                  [-self.params['edge_offset'], -self.params['edge_offset']]])]
+        self.corners_design = [np.array([[0, 0], [0, self.params['Ly_board']],
+                                 [self.params['Lx_board'], self.params['Ly_board']], 
+                                 [self.params['Lx_board'], 0], 
+                                 [0, 0]])]
 
     def add(self, component):
         self.items[component.params['name']] = component
@@ -165,6 +169,14 @@ class Board():
         corner_list = []
         for i in range(len(self.corners)):
             corner_list.append(self.corners[i].tolist())
+        with open(filename, 'w', newline='') as file:
+            write = csv.writer(file)
+            write.writerows(corner_list)
+
+        filename = positions_filepath + '/' + 'board_corners_design.csv'
+        corner_list = []
+        for i in range(len(self.corners_design)):
+            corner_list.append(self.corners_design[i].tolist())
         with open(filename, 'w', newline='') as file:
             write = csv.writer(file)
             write.writerows(corner_list)

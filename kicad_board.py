@@ -108,7 +108,7 @@ class KiCadBoard():
         if refresh:
             pcbnew.Refresh()
 
-    def add_module(self, x, y, footprint_lib, component_name, refresh=False):
+    def add_module(self, x, y, footprint_lib, component_name, rotation=None, refresh=False):
         '''
         Adds component corresponding to component_name from library footprint_lib at position (x, y)
         '''
@@ -116,6 +116,9 @@ class KiCadBoard():
         pt = pcbnew.wxPoint(x*m, y*m)
         mod.SetPosition(pcbnew.VECTOR2I(pt))
         self.BOARD.Add(mod)
+
+        if rotation is not None:
+            mod.SetOrientation(pcbnew.EDA_ANGLE(rotation, pcbnew.DEGREES_T))
         
         if refresh:
             pcbnew.Refresh()

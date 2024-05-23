@@ -10,15 +10,15 @@ cm = 0.01
 
 class Board():
 
-    def __init__(self, Lx_board, Ly_board):
+    def __init__(self, Lx_board, Ly_board, edge_offset=0):
 
         self.params = locals()
         self.params.pop('self')
         self.items = {}
-        self.corners = [np.array([[0, 0], [0, self.params['Ly_board']],
-                                 [self.params['Lx_board'], self.params['Ly_board']], 
-                                 [self.params['Lx_board'], 0], 
-                                 [0, 0]])]
+        self.corners = [np.array([[-self.params['edge_offset'], -self.params['edge_offset']], [-self.params['edge_offset'], self.params['Ly_board']+self.params['edge_offset']],
+                                 [self.params['Lx_board']+self.params['edge_offset'], self.params['Ly_board']+self.params['edge_offset']], 
+                                 [self.params['Lx_board']+self.params['edge_offset'], -self.params['edge_offset']], 
+                                 [-self.params['edge_offset'], -self.params['edge_offset']]])]
 
     def add(self, component):
         self.items[component.params['name']] = component
@@ -514,7 +514,7 @@ class SIW(Component):
         Creates one or two via lists, depending on mode.
         Uses self.params dictionary
         Required dictionary keys: L_wg, w_wg, L_taper, L_track, w_wall
-        mode: 'closed', 'open', 'half-open-left', or 'half-open-right' (string)
+        mode: 'closed', 'open', 'reflect', 'half-open-left', or 'half-open-right' (string)
         '''
         x_start = 0
         y_start = 0

@@ -405,7 +405,7 @@ class Choke(Component):
         '''
         Makes corner array defining RF decoupling filters
         Starts at top left corner, places center of pad at origin
-        Uses self.RF_choke_params dictionary
+        Uses self.params dictionary
         Required dictionary keys: theta_filter, r_filter, choke_pad_diameter
         '''
         
@@ -416,24 +416,57 @@ class Choke(Component):
         point_list_inner = np.array([]).reshape(0, 2)
         for i in range(self.params['n_points_curve1']):
             point_list_inner = np.append(point_list_inner,
-                                                        np.array([self.params['r_filter'] * np.cos(theta_list1[i]),
-                                                            self.params['r_filter'] * np.sin(theta_list1[i])])[None,:], axis=0)
+                                         np.array([self.params['r_filter'] * np.cos(theta_list1[i]),
+                                                   self.params['r_filter'] * np.sin(theta_list1[i])])[None,:], axis=0)
 
         for i in range(self.params['n_points_curve2']):
             point_list_inner = np.append(point_list_inner,
-                                                np.array([self.params['choke_pad_diameter']/2 * np.cos(theta_list2[i]),
-                                                            self.params['choke_pad_diameter']/2 * np.sin(theta_list2[i])])[None,:], axis=0)
+                                         np.array([self.params['choke_pad_diameter']/2 * np.cos(theta_list2[i]),
+                                                   self.params['choke_pad_diameter']/2 * np.sin(theta_list2[i])])[None,:], axis=0)
 
         point_list_inner = np.append(point_list_inner,
-                                                    np.array([self.params['r_filter'] * np.cos(theta_list1[0]),
-                                                            self.params['r_filter'] * np.sin(theta_list1[0])])[None,:], axis=0)
+                                     np.array([self.params['r_filter'] * np.cos(theta_list1[0]),
+                                               self.params['r_filter'] * np.sin(theta_list1[0])])[None,:], axis=0)
         
-        point_list_outer = self.params['filter_scale'] * point_list_inner
+        point_list_outer = np.array([]).reshape(0, 2)
+        for i in range(self.params['n_points_curve1']):
+            point_list_outer = np.append(point_list_outer,
+                                         np.array([self.params['r_filter'] * np.cos(theta_list1[i]),
+                                                   self.params['r_filter'] * np.sin(theta_list1[i])])[None,:], axis=0)
+
+        point_list_outer = np.append(point_list_outer, np.array([0, 0])[None,:], axis=0)
+
+        point_list_outer = np.append(point_list_outer,
+                                     np.array([self.params['r_filter'] * np.cos(theta_list1[0]),
+                                               self.params['r_filter'] * np.sin(theta_list1[0])])[None,:], axis=0)
+        point_list_outer = self.params['filter_scale'] * point_list_outer
         filter_r_gap = self.params['filter_scale'] * self.params['r_filter'] - self.params['r_filter']
         point_list_outer = point_list_outer - np.array([0, filter_r_gap/2])[None,:]
 
         self.params['filter_r_gap'] = filter_r_gap
         self.point_list = [point_list_inner, point_list_outer]
+
+class LaunchMask(Component):
+
+    def __init__(self, coax_mask_w, coax_mask_L, name='launch_mask'):
+        self.params = locals()
+        self.params.pop('self')
+        self.params['type'] = 'polygon'
+        self.items = []
+        self.make_point_list()
+
+    def make_point_list(self):
+        '''
+        Constructs an ordered vertex list describing launch mask polygon, starting at top left and moving clockwise, origin at center.
+        See dimension labels in companion figure
+        Uses self.params dictionary
+        '''
+
+        self.point_list = [np.array([[0, self.params['coax_mask_w']/2],
+                                     [self.params['coax_mask_L'], self.params['coax_mask_w']/2],
+                                     [self.params['coax_mask_L'], -self.params['coax_mask_w']/2],
+                                     [0, -self.params['coax_mask_w']/2],
+                                     [0, self.params['coax_mask_w']/2]])]
 
 class cELC(Component):
 
@@ -507,6 +540,61 @@ class cELC(Component):
                                         point_list_outer[i,:][None,:] + deltas[i,:][None,:],
                                         axis = 0)
 
+        self.point_list = [point_list_inner, point_list_outer]
+
+class Apple_cELC(Component):
+
+    def __init__(self, c_cELC, g_cELC, d_cELC, n1, n2, name='apple_cELC'):
+        self.params = locals()
+        self.params.pop('self')
+        self.params['type'] = 'polygon'
+        self.items = []
+        self.make_point_list()
+
+    def make_point_list(self):
+        '''
+        Constructs two ordered vertex lists describing Apple cELC polygons, starting at top left and moving clockwise, origin at center.
+        See dimension labels in companion figure
+        Creates two vertex polygons: outer vertex list and inner vertex list
+        Uses self.params dictionary
+        Required dictionary keys: c_cELC, g_cELC, d_cELC, n1, n2
+        '''
+
+        R = self.params['c_cELC']/2 - self.params['g_cELC']
+        theta_0 = np.arccos(1 + (self.params['g_cELC'] - self.params['d_cELC'])/(2*R))
+        xL = -2*R - self.params['g_cELC'] + self.params['d_cELC']
+        xR = 2*R + self.params['g_cELC'] - self.params['d_cELC']
+
+        theta_list = np.linspace(np.pi - theta_0, theta_0, self.params['n1'])
+        x_list = R * np.cos(theta_list)
+        y_list = R * np.sin(theta_list)
+        
+        theta_list = np.linspace(theta_0, -theta_0, self.params['n1'])
+        x_list = np.concatenate((x_list, xR - R*np.cos(theta_list)))
+        y_list = np.concatenate((y_list, R*np.sin(theta_list)))
+        
+        theta_list = np.linspace(theta_0, np.pi - theta_0, self.params['n1'])
+        x_list = np.concatenate((x_list, R*np.cos(theta_list)))
+        y_list = np.concatenate((y_list, -R*np.sin(theta_list)))
+        
+        theta_list = np.linspace(-theta_0, theta_0, self.params['n1'])
+        x_list = np.concatenate((x_list, R*np.cos(theta_list) + xL))
+        y_list = np.concatenate((y_list, R*np.sin(theta_list)))
+        
+        x_list = np.concatenate((x_list, np.array([x_list[0]])))
+        y_list = np.concatenate((y_list, np.array([y_list[0]])))
+        
+        point_list_inner = np.stack((x_list, y_list), axis=1)
+        
+        theta_list = np.linspace(0, 2*np.pi, self.params['n2'])
+        x_list = self.params['c_cELC']/2 * np.cos(theta_list)
+        y_list = self.params['c_cELC']/2 * np.sin(theta_list)
+        
+        x_list = np.concatenate((x_list, np.array([x_list[0]])))
+        y_list = np.concatenate((y_list, np.array([y_list[0]])))
+        
+        point_list_outer = np.stack((x_list, y_list), axis=1)
+        
         self.point_list = [point_list_inner, point_list_outer]
 
 class SIW(Component):

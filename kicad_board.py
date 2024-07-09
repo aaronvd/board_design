@@ -135,6 +135,7 @@ class KiCadBoard():
         text.SetPosition(position_temp)
         text.SetTextAngle(pcbnew.EDA_ANGLE(rotation, pcbnew.DEGREES_T))
         text.SetTextSize(pcbnew.VECTOR2I(pcbnew.wxSize(size*m, size*m)))
+        text.SetTextThickness(int(thickness*m))
         text.SetLayer(self.layertable[layer])
         self.BOARD.Add(text)
         

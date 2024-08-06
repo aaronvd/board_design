@@ -10,19 +10,24 @@ cm = 0.01
 
 class Board():
 
-    def __init__(self, Lx_board, Ly_board, edge_offset=0):
+    def __init__(self, Lx_board=0, Ly_board=0, edge_offset=0):
 
         self.params = locals()
         self.params.pop('self')
         self.items = {}
+        
+        if Lx_board != 0:
+            self.make_corners()
+
+    def make_corners(self):
         self.corners = [np.array([[-self.params['edge_offset'], -self.params['edge_offset']], [-self.params['edge_offset'], self.params['Ly_board']+self.params['edge_offset']],
-                                 [self.params['Lx_board']+self.params['edge_offset'], self.params['Ly_board']+self.params['edge_offset']], 
-                                 [self.params['Lx_board']+self.params['edge_offset'], -self.params['edge_offset']], 
-                                 [-self.params['edge_offset'], -self.params['edge_offset']]])]
+                                    [self.params['Lx_board']+self.params['edge_offset'], self.params['Ly_board']+self.params['edge_offset']], 
+                                    [self.params['Lx_board']+self.params['edge_offset'], -self.params['edge_offset']], 
+                                    [-self.params['edge_offset'], -self.params['edge_offset']]])]
         self.corners_design = [np.array([[0, 0], [0, self.params['Ly_board']],
-                                 [self.params['Lx_board'], self.params['Ly_board']], 
-                                 [self.params['Lx_board'], 0], 
-                                 [0, 0]])]
+                                    [self.params['Lx_board'], self.params['Ly_board']], 
+                                    [self.params['Lx_board'], 0], 
+                                    [0, 0]])]
 
     def add(self, component):
         self.items[component.params['name']] = component

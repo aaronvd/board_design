@@ -125,7 +125,7 @@ class KiCadBoard():
         if refresh:
             pcbnew.Refresh()
 
-    def write_text(self, text_string, text_x, text_y, size=0.003, thickness=.00015, rotation=180, layer="F.Silkscreen", refresh=False):
+    def write_text(self, text_string, text_x, text_y, size=0.003, thickness=.00015, rotation=180, layer="F.Silkscreen", flip=False, refresh=False):
         '''
         Places text on front silkscreen layer (by default)
         '''
@@ -137,6 +137,8 @@ class KiCadBoard():
         text.SetTextSize(pcbnew.VECTOR2I(pcbnew.wxSize(size*m, size*m)))
         text.SetTextThickness(int(thickness*m))
         text.SetLayer(self.layertable[layer])
+        if flip:
+            text.Flip(position_temp, False)
         self.BOARD.Add(text)
         
         if refresh:

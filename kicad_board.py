@@ -212,6 +212,26 @@ class KiCadBoard():
         if refresh:
             pcbnew.Refresh()
 
+    def draw_polygon(self, vertex_array, layer, filled=True, refresh=False):
+        '''
+        Creates polygon on defined layer
+        '''
+        layer = self.layertable[layer]
+        chain = pcbnew.SHAPE_LINE_CHAIN()
+        for (x,y) in vertex_array:
+            chain.Append(int(x*m), int(y*m))
+        chain.SetClosed(True)
+        sps = pcbnew.SHAPE_POLY_SET()
+        sps.AddOutline(chain)
+        ps = pcbnew.PCB_SHAPE(self.BOARD, pcbnew.SHAPE_T_POLY)
+        ps.SetPolyShape(sps)
+        ps.SetFilled(filled)
+        ps.SetLayer(layer)
+        self.BOARD.Add(ps)
+
+        if refresh:
+            pcbnew.Refresh()
+
 
 
 
